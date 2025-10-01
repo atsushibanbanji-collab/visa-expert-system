@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>米国ビザ選定エキスパートシステム</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-passport"></i>
+                    <h1>米国ビザ選定エキスパートシステム</h1>
+                </div>
+                <p class="subtitle">あなたに最適な米国ビザタイプを見つけます</p>
+            </div>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progressContainer" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0 / 0 質問に回答済み</div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Screen -->
+            <div class="section" id="welcomeSection">
+                <div class="welcome-card">
+                    <div class="welcome-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h2>米国ビザ選定エキスパートシステムへようこそ</h2>
+                    <p>このインテリジェントシステムは、あなたの状況と要件に基づいて最適な米国ビザタイプを判定します。</p>
+
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-brain"></i>
+                            <h3>AIによる分析</h3>
+                            <p>高度なルールベースエンジンがあなたの回答を分析</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-step-forward"></i>
+                            <h3>ステップバイステップ</h3>
+                            <p>分かりやすい質問形式で進行</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-file-pdf"></i>
+                            <h3>詳細レポート</h3>
+                            <p>包括的なPDF結果をダウンロード可能</p>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary start-btn" onclick="startQuestionnaire()">
+                        <i class="fas fa-play"></i>
+                        ビザ診断を開始
+                    </button>
+                </div>
+            </div>
+
+            <!-- Questionnaire Section -->
+            <div class="section" id="questionnaireSection" style="display: none;">
+                <div class="questionnaire-card">
+                    <div class="question-header">
+                        <button class="btn btn-secondary back-btn" onclick="goBack()" id="backBtn" style="display: none;">
+                            <i class="fas fa-arrow-left"></i>
+                            戻る
+                        </button>
+                        <div class="question-counter">
+                            質問 <span id="currentQuestionNum">1</span> / <span id="totalQuestions">10</span>
+                        </div>
+                    </div>
+
+                    <div class="question-content">
+                        <h2 id="questionText">質問を読み込み中...</h2>
+                        <div class="question-note" id="questionNote" style="display: none;"></div>
+
+                        <div class="answer-options" id="answerOptions">
+                            <!-- Answer options will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="question-navigation">
+                        <button class="btn btn-primary next-btn" onclick="nextQuestion()" id="nextBtn" disabled>
+                            次へ
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h2><i class="fas fa-chart-line"></i> あなたへのビザ推奨</h2>
+                    <div class="results-actions">
+                        <button class="btn btn-secondary" onclick="restartAssessment()">
+                            <i class="fas fa-redo"></i>
+                            最初から
+                        </button>
+                        <button class="btn btn-success" onclick="exportToPDF()">
+                            <i class="fas fa-download"></i>
+                            PDFダウンロード
+                        </button>
+                    </div>
+                </div>
+
+                <div class="results-content" id="resultsContent">
+                    <!-- Results will be populated by JavaScript -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+            <div class="spinner"></div>
+            <p>回答を分析中...</p>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p><strong>免責事項：</strong> このシステムは一般的なガイダンスのみを提供するものであり、法的助言を構成するものではありません。正式なガイダンスについては、移民弁護士にご相談ください。</p>
+                <div class="footer-links">
+                    <a href="https://travel.state.gov/" target="_blank">米国国務省公式サイト</a>
+                    <a href="https://www.uscis.gov/" target="_blank">USCIS</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

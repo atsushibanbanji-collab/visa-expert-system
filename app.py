@@ -1,0 +1,298 @@
+from flask import Flask, render_template, request, jsonify, session
+import json
+import os
+from datetime import datetime
+from reportlab.lib.pagesizes import letter, A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Flowable
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+import io
+import base64
+
+app = Flask(__name__)
+app.secret_key = 'your-secret-key-change-this-in-production'
+
+class VisaRuleEngine:
+    def __init__(self, rules_file):
+        with open(rules_file, 'r', encoding='utf-8') as f:
+            self.data = json.load(f)
+        self.rules = self.data['rules']
+        self.questions = self.data['questions']
+        self.visa_types = self.data['visa_types']
+
+    def evaluate_condition(self, condition, facts):
+        """Evaluate a single condition against facts"""
+        if isinstance(condition, str):
+            return facts.get(condition, False)
+        elif isinstance(condition, dict):
+            if condition['type'] == 'AND':
+                return all(self.evaluate_condition(c, facts) for c in condition['conditions'])
+            elif condition['type'] == 'OR':
+                return any(self.evaluate_condition(c, facts) for c in condition['conditions'])
+        return False
+
+    def get_applicable_visas(self, user_answers):
+        """Determine which visas are applicable based on user answers"""
+        facts = {}
+
+        # Convert user answers to facts
+        for question_id, answer in user_answers.items():
+            question = next((q for q in self.questions if q['id'] == question_id), None)
+            if question and answer:
+                facts[question['condition_id']] = True
+
+        # Forward chaining to derive new facts
+        changed = True
+        max_iterations = 50
+        iteration = 0
+
+        while changed and iteration < max_iterations:
+            changed = False
+            iteration += 1
+
+            for rule in self.rules:
+                conclusion = rule['conclusion']
+                if conclusion not in facts:
+                    if self.evaluate_condition(rule['conditions'], facts):
+                        facts[conclusion] = True
+                        changed = True
+
+        # Find applicable visa types
+        applicable_visas = []
+        for visa_type, visa_info in self.visa_types.items():
+            if facts.get(visa_type, False):
+                # Get satisfied conditions
+                satisfied_conditions = []
+                missing_conditions = []
+
+                # Find the rule that concludes this visa type
+                visa_rule = next((rule for rule in self.rules if rule['conclusion'] == visa_type), None)
+                if visa_rule:
+                    required_conditions = self._get_all_conditions_for_visa(visa_type)
+                    for condition in required_conditions:
+                        question = next((q for q in self.questions if q['condition_id'] == condition), None)
+                        if question:
+                            if user_answers.get(question['id']):
+                                satisfied_conditions.append({
+                                    'condition': condition,
+                                    'question': question['text'],
+                                    'answer': 'Yes'
+                                })
+                            else:
+                                missing_conditions.append({
+                                    'condition': condition,
+                                    'question': question['text'],
+                                    'answer': 'No' if question['id'] in user_answers else 'Not answered'
+                                })
+
+                applicable_visas.append({
+                    'type': visa_type,
+                    'name': visa_info['name'],
+                    'description': visa_info['description'],
+                    'color': visa_info['color'],
+                    'satisfied_conditions': satisfied_conditions,
+                    'missing_conditions': missing_conditions,
+                    'confidence': len(satisfied_conditions) / max(1, len(satisfied_conditions) + len(missing_conditions))
+                })
+
+        # Sort by confidence
+        applicable_visas.sort(key=lambda x: x['confidence'], reverse=True)
+
+        return applicable_visas, facts
+
+    def _get_all_conditions_for_visa(self, visa_type):
+        """Get all conditions required for a specific visa type (recursive)"""
+        conditions = set()
+
+        def collect_conditions(rule_conclusion):
+            rule = next((r for r in self.rules if r['conclusion'] == rule_conclusion), None)
+            if rule:
+                if isinstance(rule['conditions'], dict):
+                    for condition in rule['conditions']['conditions']:
+                        if isinstance(condition, str):
+                            # Check if this condition is itself a conclusion of another rule
+                            sub_rule = next((r for r in self.rules if r['conclusion'] == condition), None)
+                            if sub_rule:
+                                collect_conditions(condition)
+                            else:
+                                conditions.add(condition)
+
+        collect_conditions(visa_type)
+        return list(conditions)
+
+    def get_next_questions(self, answered_questions):
+        """Get the next most relevant questions based on current answers"""
+        answered_set = set(answered_questions)
+        unanswered = [q for q in self.questions if q['id'] not in answered_set]
+
+        # If we've answered enough questions for basic evaluation, limit additional questions
+        if len(answered_questions) >= 8:
+            # Only return high-priority questions
+            priority_questions = [q for q in unanswered if 'required_for' in q]
+            return priority_questions[:3]  # Limit to 3 more questions
+
+        # Prioritize questions that are required for specific visa types
+        priority_questions = []
+        regular_questions = []
+
+        for question in unanswered:
+            if 'required_for' in question:
+                priority_questions.append(question)
+            else:
+                regular_questions.append(question)
+
+        # Return a reasonable number of questions
+        all_questions = priority_questions + regular_questions
+        return all_questions[:10]  # Limit to prevent overwhelming the user
+
+# Initialize the rule engine
+rule_engine = VisaRuleEngine('rules.json')
+
+@app.route('/')
+def index():
+    session.clear()  # Clear session on new visit
+    return render_template('index.html')
+
+@app.route('/api/questions')
+def get_questions():
+    """Get all questions or next questions based on current progress"""
+    answered = request.args.get('answered', '')
+    answered_list = answered.split(',') if answered else []
+
+    next_questions = rule_engine.get_next_questions(answered_list)
+
+    return jsonify({
+        'questions': next_questions[:5],  # Return up to 5 questions at a time
+        'total_questions': len(rule_engine.questions),
+        'answered_count': len(answered_list)
+    })
+
+@app.route('/api/evaluate', methods=['POST'])
+def evaluate_visa():
+    """Evaluate user answers and return applicable visas"""
+    user_answers = request.json.get('answers', {})
+
+    # Store answers in session
+    session['user_answers'] = user_answers
+
+    applicable_visas, facts = rule_engine.get_applicable_visas(user_answers)
+
+    return jsonify({
+        'applicable_visas': applicable_visas,
+        'total_questions': len(rule_engine.questions),
+        'answered_questions': len(user_answers),
+        'evaluation_date': datetime.now().isoformat()
+    })
+
+@app.route('/api/export/pdf', methods=['POST'])
+def export_pdf():
+    """Export visa evaluation results as PDF"""
+    try:
+        data = request.json
+        applicable_visas = data.get('applicable_visas', [])
+        user_info = data.get('user_info', {})
+
+        # Create PDF in memory
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=A4)
+
+        # Define styles
+        styles = getSampleStyleSheet()
+        title_style = ParagraphStyle(
+            'CustomTitle',
+            parent=styles['Heading1'],
+            fontSize=20,
+            spaceAfter=30,
+            alignment=1  # Center alignment
+        )
+
+        heading_style = ParagraphStyle(
+            'CustomHeading',
+            parent=styles['Heading2'],
+            fontSize=14,
+            spaceAfter=12,
+            textColor='#2c3e50'
+        )
+
+        # Build PDF content
+        story = []
+
+        # Title
+        story.append(Paragraph("米国ビザ評価結果", title_style))
+        story.append(Spacer(1, 12))
+
+        # Date
+        story.append(Paragraph(f"評価日: {datetime.now().strftime('%Y年%m月%d日')}", styles['Normal']))
+        story.append(Spacer(1, 20))
+
+        # User information (if provided)
+        if user_info:
+            story.append(Paragraph("申請者情報:", heading_style))
+            for key, value in user_info.items():
+                story.append(Paragraph(f"{key}: {value}", styles['Normal']))
+            story.append(Spacer(1, 20))
+
+        # Visa recommendations
+        story.append(Paragraph("推奨ビザタイプ:", heading_style))
+
+        if applicable_visas:
+            for i, visa in enumerate(applicable_visas, 1):
+                confidence_percent = int(visa['confidence'] * 100)
+                story.append(Paragraph(f"{i}. {visa['name']} (適合度: {confidence_percent}%)", styles['Heading3']))
+                story.append(Paragraph(visa['description'], styles['Normal']))
+
+                if visa['satisfied_conditions']:
+                    story.append(Paragraph("満たされた要件:", styles['Heading4']))
+                    for condition in visa['satisfied_conditions']:
+                        story.append(Paragraph(f"• {condition['question']}", styles['Normal']))
+
+                if visa['missing_conditions']:
+                    story.append(Paragraph("不足している要件:", styles['Heading4']))
+                    for condition in visa['missing_conditions']:
+                        story.append(Paragraph(f"• {condition['question']}", styles['Normal']))
+
+                story.append(Spacer(1, 20))
+        else:
+            story.append(Paragraph("提供された情報に基づいて適切なビザタイプが見つかりませんでした。", styles['Normal']))
+
+        # Disclaimer
+        story.append(Spacer(1, 30))
+        story.append(Paragraph("免責事項:", heading_style))
+        story.append(Paragraph(
+            "この評価は情報提供のみを目的としており、法的助言を構成するものではありません。"
+            "正式なガイダンスについては、移民弁護士または公式機関にご相談ください。",
+            styles['Normal']
+        ))
+
+        # Build PDF
+        doc.build(story)
+
+        # Get PDF bytes
+        pdf_bytes = buffer.getvalue()
+        buffer.close()
+
+        # Return base64 encoded PDF
+        pdf_base64 = base64.b64encode(pdf_bytes).decode('utf-8')
+
+        return jsonify({
+            'success': True,
+            'pdf_data': pdf_base64,
+            'filename': f'visa_evaluation_{datetime.now().strftime("%Y%m%d_%H%M%S")}.pdf'
+        })
+
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/session/clear', methods=['POST'])
+def clear_session():
+    """Clear the current session"""
+    session.clear()
+    return jsonify({'success': True})
+
+if __name__ == '__main__':
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
