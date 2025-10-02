@@ -431,5 +431,319 @@
       "condition_id": "cond_63"
     }
   ],
-  "rules": []
+  "rules": [
+    {
+      "id": 1,
+      "description": "Rule 1",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_1",
+          "cond_25",
+          "cond_51"
+        ]
+      },
+      "conclusion": "E_visa"
+    },
+    {
+      "id": 2,
+      "description": "Rule 2",
+      "conditions": {
+        "type": "OR",
+        "conditions": [
+          "cond_2",
+          "cond_26"
+        ]
+      },
+      "conclusion": "会社がEビザの条件を満たします"
+    },
+    {
+      "id": 3,
+      "description": "Rule 3",
+      "conditions": {
+        "type": "OR",
+        "conditions": [
+          "cond_3",
+          "cond_27",
+          "cond_52",
+          "cond_59"
+        ]
+      },
+      "conclusion": "会社がEビザの投資の条件を満たします"
+    },
+    {
+      "id": 4,
+      "description": "Rule 4",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_4",
+          "cond_28",
+          "cond_53"
+        ]
+      },
+      "conclusion": "会社がEビザの貿易の条件を満たします"
+    },
+    {
+      "id": 5,
+      "description": "Rule 5",
+      "conditions": {
+        "type": "OR",
+        "conditions": [
+          "cond_5",
+          "cond_29",
+          "cond_54"
+        ]
+      },
+      "conclusion": "申請者がEビザの条件を満たします"
+    },
+    {
+      "id": 6,
+      "description": "Rule 6",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_6",
+          "cond_30"
+        ]
+      },
+      "conclusion": "申請者がEビザのマネージャー以上の条件を満たします"
+    },
+    {
+      "id": 7,
+      "description": "Rule 7",
+      "conditions": {
+        "type": "OR",
+        "conditions": [
+          "cond_10",
+          "cond_34",
+          "cond_56"
+        ]
+      },
+      "conclusion": "申請者がEビザのスタッフの条件を満たします"
+    },
+    {
+      "id": 8,
+      "description": "Rule 8",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_11",
+          "cond_35"
+        ]
+      },
+      "conclusion": "EビザTDY(short-term needs)の条件を満たします"
+    },
+    {
+      "id": 9,
+      "description": "Rule 9",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_12",
+          "cond_36",
+          "cond_57"
+        ]
+      },
+      "conclusion": "L_blanket"
+    },
+    {
+      "id": 10,
+      "description": "Rule 10",
+      "conditions": {
+        "type": "OR",
+        "conditions": [
+          "cond_13",
+          "cond_37",
+          "cond_58"
+        ]
+      },
+      "conclusion": "会社がBlanket Lビザの条件を満たします"
+    },
+    {
+      "id": 11,
+      "description": "Rule 11",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_14",
+          "cond_38"
+        ]
+      },
+      "conclusion": "申請者がBlanket Lビザの条件を満たします"
+    },
+    {
+      "id": 12,
+      "description": "Rule 12",
+      "conditions": {
+        "type": "OR",
+        "conditions": [
+          "cond_15",
+          "cond_39"
+        ]
+      },
+      "conclusion": "Blanket Lビザのマネージャーまたはスタッフの条件を満たします"
+    },
+    {
+      "id": 13,
+      "description": "Rule 13",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_16",
+          "cond_40"
+        ]
+      },
+      "conclusion": "Blanket Lビザのマネージャーの条件を満たします"
+    },
+    {
+      "id": 14,
+      "description": "Rule 14",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_17",
+          "cond_41"
+        ]
+      },
+      "conclusion": "Blanket Lビザのスタッフの条件を満たします"
+    },
+    {
+      "id": 15,
+      "description": "Rule 15",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_12",
+          "cond_42"
+        ]
+      },
+      "conclusion": "L_individual"
+    },
+    {
+      "id": 16,
+      "description": "Rule 16",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_14",
+          "cond_43",
+          "cond_60"
+        ]
+      },
+      "conclusion": "申請者がLビザ（Individual）の条件を満たします"
+    },
+    {
+      "id": 17,
+      "description": "Rule 17",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_16",
+          "cond_40",
+          "cond_61"
+        ]
+      },
+      "conclusion": "Lビザ（Individual）のマネージャーの条件を満たします"
+    },
+    {
+      "id": 18,
+      "description": "Rule 18",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_17",
+          "cond_41"
+        ]
+      },
+      "conclusion": "Lビザ（Individual）のスタッフの条件を満たします"
+    },
+    {
+      "id": 19,
+      "description": "Rule 19",
+      "conditions": {
+        "type": "OR",
+        "conditions": [
+          "cond_18",
+          "cond_44",
+          "cond_62"
+        ]
+      },
+      "conclusion": "H1B"
+    },
+    {
+      "id": 20,
+      "description": "Rule 20",
+      "conditions": {
+        "type": "OR",
+        "conditions": [
+          "cond_19",
+          "cond_45"
+        ]
+      },
+      "conclusion": "Bビザの申請ができます"
+    },
+    {
+      "id": 21,
+      "description": "Rule 21",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_21",
+          "cond_48",
+          "cond_47"
+        ]
+      },
+      "conclusion": "契約書に基づくBビザの申請ができます"
+    },
+    {
+      "id": 22,
+      "description": "Rule 22",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_22",
+          "cond_47"
+        ]
+      },
+      "conclusion": "B-1 in lieu of H-1Bビザの申請ができます"
+    },
+    {
+      "id": 23,
+      "description": "Rule 23",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_23",
+          "cond_49",
+          "cond_63"
+        ]
+      },
+      "conclusion": "J-1ビザの申請ができます"
+    },
+    {
+      "id": 24,
+      "description": "Rule 24",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_24",
+          "cond_50"
+        ]
+      },
+      "conclusion": "Bビザの申請ができます"
+    },
+    {
+      "id": 25,
+      "description": "Rule 25",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          "cond_24",
+          "cond_50"
+        ]
+      },
+      "conclusion": "B-1 in lieu of H3ビザの申請ができます"
+    }
+  ]
 }
