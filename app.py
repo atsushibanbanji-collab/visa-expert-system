@@ -121,29 +121,12 @@ class VisaRuleEngine:
         return list(conditions)
 
     def get_next_questions(self, answered_questions):
-        """Get the next most relevant questions based on current answers"""
+        """Get all unanswered questions in order"""
         answered_set = set(answered_questions)
         unanswered = [q for q in self.questions if q['id'] not in answered_set]
 
-        # If we've answered enough questions for basic evaluation, limit additional questions
-        if len(answered_questions) >= 8:
-            # Only return high-priority questions
-            priority_questions = [q for q in unanswered if 'required_for' in q]
-            return priority_questions[:3]  # Limit to 3 more questions
-
-        # Prioritize questions that are required for specific visa types
-        priority_questions = []
-        regular_questions = []
-
-        for question in unanswered:
-            if 'required_for' in question:
-                priority_questions.append(question)
-            else:
-                regular_questions.append(question)
-
-        # Return a reasonable number of questions
-        all_questions = priority_questions + regular_questions
-        return all_questions[:10]  # Limit to prevent overwhelming the user
+        # Return all unanswered questions
+        return unanswered
 
 # Initialize the rule engine
 rule_engine = VisaRuleEngine('rules.json')
@@ -162,7 +145,7 @@ def get_questions():
     next_questions = rule_engine.get_next_questions(answered_list)
 
     return jsonify({
-        'questions': next_questions[:5],  # Return up to 5 questions at a time
+        'questions': next_questions[:1],  # Return 1 question at a time
         'total_questions': len(rule_engine.questions),
         'answered_count': len(answered_list)
     })

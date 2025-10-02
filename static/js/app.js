@@ -230,24 +230,15 @@ async function nextQuestion() {
     currentState.currentQuestionIndex++;
     updateProgress();
 
-    // Check if we've reached the end of current questions or answered enough
-    const totalAnswered = Object.keys(currentState.answers).length;
-
+    // Check if we've reached the end of current questions
     if (currentState.currentQuestionIndex >= currentState.questions.length) {
-        // Check if we have enough answers to make recommendations
-        if (totalAnswered >= 5) {
-            // We have enough answers, proceed to evaluation
-            evaluateResults();
-            return;
-        }
-
-        // Load more questions based on current answers
+        // Load more questions
         showLoading('次の質問を読み込んでいます...');
         try {
             await loadQuestions();
             currentState.currentQuestionIndex = 0; // Reset to show new questions
 
-            // If no new questions available, proceed to evaluation
+            // If no new questions available, all questions answered - proceed to evaluation
             if (currentState.questions.length === 0) {
                 evaluateResults();
                 return;
