@@ -53,657 +53,383 @@
   },
   "questions": [
     {
-      "id": "applicant_company_nationality",
-      "text": "あなたと会社は同じ条約国（日本）出身ですか？",
+      "id": "visa_q1",
+      "text": "申請者と会社の国籍が同じです",
       "type": "boolean",
-      "required_for": ["E_visa"],
-      "condition_id": "same_nationality"
+      "condition_id": "cond_1"
     },
     {
-      "id": "company_investment_equipment",
-      "text": "貴社は貸借対照表上で30万ドル以上の機器・建物を保有していますか？",
+      "id": "visa_q2",
+      "text": "会社がEビザの投資の条件を満たします",
       "type": "boolean",
-      "condition_id": "investment_equipment_300k"
+      "condition_id": "cond_2"
     },
     {
-      "id": "company_acquisition",
-      "text": "貴社は30万ドル以上で買収、または買収されましたか？",
+      "id": "visa_q3",
+      "text": "減価償却前の設備や建物が30万ドル以上財務諸表の資産に計上されています",
       "type": "boolean",
-      "condition_id": "acquisition_300k"
+      "condition_id": "cond_3"
     },
     {
-      "id": "company_running_costs",
-      "text": "貴社は運営費を含めて30万ドル以上支出していますか？",
+      "id": "visa_q4",
+      "text": "会社の行う貿易の50％が日米間です",
       "type": "boolean",
-      "condition_id": "running_costs_300k"
+      "condition_id": "cond_4"
     },
     {
-      "id": "company_establishment_costs",
-      "text": "貴社は設立費用（不動産を除く）として30万ドル以上支出していますか？",
+      "id": "visa_q5",
+      "text": "申請者がEビザのマネージャー以上の条件を満たします",
       "type": "boolean",
-      "condition_id": "establishment_costs_300k"
+      "condition_id": "cond_5"
     },
     {
-      "id": "trade_us_japan_50_percent",
-      "text": "貴社の貿易の50%以上が米国と日本間のものですか？",
+      "id": "visa_q6",
+      "text": "米国拠点でEビザでマネージャー以上として認められるポジションに就きます",
       "type": "boolean",
-      "condition_id": "trade_50_percent_us_japan"
+      "condition_id": "cond_6"
     },
     {
-      "id": "continuous_trade",
-      "text": "貴社は継続的な貿易活動を行っていますか？",
+      "id": "visa_q7",
+      "text": "CEOなどのオフィサーのポジションに就きます",
       "type": "boolean",
-      "condition_id": "continuous_trade"
+      "condition_id": "cond_7"
     },
     {
-      "id": "trade_profits_80_percent",
-      "text": "貿易利益が会社経費の80%以上をカバーしていますか？",
+      "id": "visa_q8",
+      "text": "米国拠点のポジションの業務に深く関連する業務の経験が2年以上あります",
       "type": "boolean",
-      "condition_id": "trade_profits_80_percent"
+      "condition_id": "cond_8"
     },
     {
-      "id": "position_ceo_officer",
-      "text": "あなたはCEOまたは役員ですか？",
+      "id": "visa_q9",
+      "text": "2年以上のマネージャー経験があります",
       "type": "boolean",
-      "condition_id": "ceo_or_officer"
+      "condition_id": "cond_9"
     },
     {
-      "id": "position_business_planning_manager",
-      "text": "あなたは事業企画マネージャーですか？",
+      "id": "visa_q10",
+      "text": "理系の大学院卒で、米国拠点の技術系の業務に深く関連する3年以上の業務経験があります",
       "type": "boolean",
-      "condition_id": "business_planning_manager"
+      "condition_id": "cond_10"
     },
     {
-      "id": "position_multiple_subordinates",
-      "text": "あなたは複数のフルタイム部下を持つマネージャーですか？",
+      "id": "visa_q11",
+      "text": "2年以内の期間で、目的を限定した派遣理由を説明できます",
       "type": "boolean",
-      "condition_id": "manager_multiple_subordinates"
+      "condition_id": "cond_11"
     },
     {
-      "id": "related_experience_2_years",
-      "text": "関連業務経験が2年以上ありますか？",
+      "id": "visa_q12",
+      "text": "アメリカ以外からアメリカへのグループ内での異動です",
       "type": "boolean",
-      "condition_id": "related_experience_2_years"
+      "condition_id": "cond_12"
     },
     {
-      "id": "management_experience_2_years",
-      "text": "マネジメント経験が2年以上ありますか？",
+      "id": "visa_q13",
+      "text": "アメリカにある子会社の売り上げの合計が25百万ドル以上です",
       "type": "boolean",
-      "condition_id": "management_experience_2_years"
+      "condition_id": "cond_13"
     },
     {
-      "id": "project_management_2_years",
-      "text": "プロジェクトマネジメント経験が2年以上ありますか？",
+      "id": "visa_q14",
+      "text": "直近3年のうち1年以上、アメリカ以外のグループ会社に所属していました",
       "type": "boolean",
-      "condition_id": "project_management_2_years"
+      "condition_id": "cond_14"
     },
     {
-      "id": "stem_graduate_3_years",
-      "text": "STEM分野の大学院卒で3年以上の関連経験がありますか？",
+      "id": "visa_q15",
+      "text": "Blanket Lビザのマネージャーの条件を満たします",
       "type": "boolean",
-      "condition_id": "stem_graduate_3_years"
+      "condition_id": "cond_15"
     },
     {
-      "id": "stem_undergraduate_4_years",
-      "text": "STEM分野の学部卒で4年以上の経験がありますか？",
+      "id": "visa_q16",
+      "text": "マネージャーとしての経験があります",
       "type": "boolean",
-      "condition_id": "stem_undergraduate_4_years"
+      "condition_id": "cond_16"
     },
     {
-      "id": "directly_related_experience_5_years",
-      "text": "直接関連する業務経験が5年以上ありますか？",
+      "id": "visa_q17",
+      "text": "specialized knowledgeがあります",
       "type": "boolean",
-      "condition_id": "directly_related_experience_5_years"
+      "condition_id": "cond_17"
     },
     {
-      "id": "limited_purpose_2_years",
-      "text": "目的が限定的で2年以内ですか？",
+      "id": "visa_q18",
+      "text": "大卒以上で、専攻内容と業務内容が一致しています",
       "type": "boolean",
-      "condition_id": "limited_purpose_2_years"
+      "condition_id": "cond_18"
     },
     {
-      "id": "intracompany_transfer",
-      "text": "同じ会社内で米国へ転勤しますか？",
+      "id": "visa_q19",
+      "text": "Bビザの申請条件を満たす（ESTAの認証は通る）",
       "type": "boolean",
-      "required_for": ["L_blanket", "L_individual"],
-      "condition_id": "intracompany_transfer"
+      "condition_id": "cond_19"
     },
     {
-      "id": "us_subsidiary_revenue_25m",
-      "text": "米国子会社の売上は2500万ドル以上ですか？",
+      "id": "visa_q20",
+      "text": "アメリカでの活動は商用の範囲です",
       "type": "boolean",
-      "condition_id": "us_subsidiary_revenue_25m"
+      "condition_id": "cond_20"
     },
     {
-      "id": "local_employees_1000",
-      "text": "会社には1000人以上の現地従業員がいますか？",
+      "id": "visa_q21",
+      "text": "アメリカの会社に販売した装置や設備のための作業をします",
       "type": "boolean",
-      "condition_id": "local_employees_1000"
+      "condition_id": "cond_21"
     },
     {
-      "id": "l_petitions_10_per_year",
-      "text": "会社は年間10件以上のL申請を行っていますか？",
+      "id": "visa_q22",
+      "text": "H-1Bビザが必要な専門性の高い作業をします",
       "type": "boolean",
-      "condition_id": "l_petitions_10_per_year"
+      "condition_id": "cond_22"
     },
     {
-      "id": "overseas_group_1_year_in_3",
-      "text": "過去3年間に海外グループ会社で1年以上勤務していますか？",
+      "id": "visa_q23",
+      "text": "研修にOJTが含まれます",
       "type": "boolean",
-      "required_for": ["L_blanket", "L_individual"],
-      "condition_id": "overseas_group_1_year_in_3"
+      "condition_id": "cond_23"
     },
     {
-      "id": "us_role_managerial",
-      "text": "米国での役職は管理職とみなされますか？",
+      "id": "visa_q24",
+      "text": "研修内容は商用の範囲です",
       "type": "boolean",
-      "condition_id": "us_role_managerial"
+      "condition_id": "cond_24"
     },
     {
-      "id": "has_specialized_knowledge",
-      "text": "専門知識を持っていますか？",
+      "id": "visa_q25",
+      "text": "会社がEビザの条件を満たします",
       "type": "boolean",
-      "condition_id": "has_specialized_knowledge"
+      "condition_id": "cond_25"
     },
     {
-      "id": "us_role_requires_specialized_knowledge",
-      "text": "米国での役職には専門知識が必要ですか？",
+      "id": "visa_q26",
+      "text": "会社がEビザの貿易の条件を満たします",
       "type": "boolean",
-      "condition_id": "us_role_requires_specialized_knowledge"
+      "condition_id": "cond_26"
     },
     {
-      "id": "college_graduates_subordinates_2",
-      "text": "大卒のフルタイム部下が2人以上いますか？",
+      "id": "visa_q27",
+      "text": "30万ドル以上で企業を買収した会社か、買収された会社です",
       "type": "boolean",
-      "condition_id": "college_graduates_subordinates_2"
+      "condition_id": "cond_27"
     },
     {
-      "id": "college_degree_matching_job",
-      "text": "職務要件に合った大学学位を持っていますか？",
+      "id": "visa_q28",
+      "text": "会社の行う貿易は継続的です",
       "type": "boolean",
-      "condition_id": "college_degree_matching_job"
+      "condition_id": "cond_28"
     },
     {
-      "id": "degree_with_3_years_experience",
-      "text": "学位と3年以上の経験がありますか？",
+      "id": "visa_q29",
+      "text": "申請者がEビザのスタッフの条件を満たします",
       "type": "boolean",
-      "condition_id": "degree_with_3_years_experience"
+      "condition_id": "cond_29"
     },
     {
-      "id": "high_school_12_years_experience",
-      "text": "高校卒業と12年以上の経験がありますか？",
+      "id": "visa_q30",
+      "text": "マネージャー以上のポジションの業務を遂行する十分な能力があります",
       "type": "boolean",
-      "condition_id": "high_school_12_years_experience"
+      "condition_id": "cond_30"
     },
     {
-      "id": "technical_school_3_years_experience",
-      "text": "専門学校卒業と3年以上の経験がありますか？",
+      "id": "visa_q31",
+      "text": "経営企画のマネージャーなど、米国拠点の経営に関わるポジションに就きます",
       "type": "boolean",
-      "condition_id": "technical_school_3_years_experience"
+      "condition_id": "cond_31"
     },
     {
-      "id": "esta_approved",
-      "text": "ESTA認証を受けていますか？",
+      "id": "visa_q32",
+      "text": "マネジメント経験が2年以上あります",
       "type": "boolean",
-      "condition_id": "esta_approved"
+      "condition_id": "cond_32"
     },
     {
-      "id": "commercial_activities",
-      "text": "商業活動を行いますか？",
+      "id": "visa_q33",
+      "text": "マネジメントが求められるプロジェクトマネージャーなどの2年以上の経験があります",
       "type": "boolean",
-      "condition_id": "commercial_activities"
+      "condition_id": "cond_33"
     },
     {
-      "id": "stay_more_than_90_days",
-      "text": "滞在期間は90日以上ですか？",
+      "id": "visa_q34",
+      "text": "理系の学部卒で、米国拠点の技術系の業務に深く関連する4年以上の業務経験があります",
       "type": "boolean",
-      "condition_id": "stay_more_than_90_days"
+      "condition_id": "cond_34"
     },
     {
-      "id": "stay_6_months_or_less",
-      "text": "滞在期間は6ヶ月以内ですか？",
+      "id": "visa_q35",
+      "text": "米国拠点の業務に深く関連する2年以上の業務経験があります",
       "type": "boolean",
-      "condition_id": "stay_6_months_or_less"
+      "condition_id": "cond_35"
     },
     {
-      "id": "equipment_installation_work",
-      "text": "機器設置作業を行いますか？",
+      "id": "visa_q36",
+      "text": "会社がBlanket Lビザの条件を満たします",
       "type": "boolean",
-      "condition_id": "equipment_installation_work"
+      "condition_id": "cond_36"
     },
     {
-      "id": "has_sales_contract",
-      "text": "販売契約がありますか？",
+      "id": "visa_q37",
+      "text": "アメリカにある子会社が1,000人以上ローカル採用をしています",
       "type": "boolean",
-      "condition_id": "has_sales_contract"
+      "condition_id": "cond_37"
     },
     {
-      "id": "h1b_level_specialized_work",
-      "text": "H-1Bレベルの専門的業務を行いますか？",
+      "id": "visa_q38",
+      "text": "Blanket Lビザのマネージャーまたはスタッフの条件を満たします",
       "type": "boolean",
-      "condition_id": "h1b_level_specialized_work"
+      "condition_id": "cond_38"
     },
     {
-      "id": "training_includes_ojt",
-      "text": "研修にはOJT（実地研修）が含まれますか？",
+      "id": "visa_q39",
+      "text": "Blanket Lビザスタッフの条件を満たします",
       "type": "boolean",
-      "condition_id": "training_includes_ojt"
+      "condition_id": "cond_39"
     },
     {
-      "id": "training_18_months_or_less",
-      "text": "研修期間は18ヶ月以内ですか？",
+      "id": "visa_q40",
+      "text": "アメリカでの業務はマネージャーとみなされます",
       "type": "boolean",
-      "condition_id": "training_18_months_or_less"
+      "condition_id": "cond_40"
     },
     {
-      "id": "sufficient_english",
-      "text": "十分な英語力がありますか？",
+      "id": "visa_q41",
+      "text": "アメリカでの業務はspecialized knowledgeを必要とします",
       "type": "boolean",
-      "condition_id": "sufficient_english"
+      "condition_id": "cond_41"
     },
     {
-      "id": "commercial_training",
-      "text": "商業研修を受けますか？",
+      "id": "visa_q42",
+      "text": "申請者がLビザ（Individual）の条件を満たします",
       "type": "boolean",
-      "condition_id": "commercial_training"
+      "condition_id": "cond_42"
     },
     {
-      "id": "question_6_placeholder",
-      "text": "質問6（プレースホルダー - 文書からの明確化が必要）",
+      "id": "visa_q43",
+      "text": "Lビザ（Individual）のマネージャーまたはスタッフの条件を満たします",
       "type": "boolean",
-      "condition_id": "question_6_placeholder",
-      "note": "ルール19で言及されている「質問6」を指しますが、文書では明確に定義されていません"
+      "condition_id": "cond_43"
+    },
+    {
+      "id": "visa_q44",
+      "text": "大卒以上で、専攻内容と業務内容が異なりますが、実務経験が3年以上あります",
+      "type": "boolean",
+      "condition_id": "cond_44"
+    },
+    {
+      "id": "visa_q45",
+      "text": "Bビザの申請条件を満たす（ESTAの認証は通らない）",
+      "type": "boolean",
+      "condition_id": "cond_45"
+    },
+    {
+      "id": "visa_q46",
+      "text": "1回の滞在期間は90日を越えます",
+      "type": "boolean",
+      "condition_id": "cond_46"
+    },
+    {
+      "id": "visa_q47",
+      "text": "1回の滞在期間は6か月を越えません",
+      "type": "boolean",
+      "condition_id": "cond_47"
+    },
+    {
+      "id": "visa_q48",
+      "text": "装置や設備の販売を示す契約書や発注書があります",
+      "type": "boolean",
+      "condition_id": "cond_48"
+    },
+    {
+      "id": "visa_q49",
+      "text": "研修期間は18か月以内です",
+      "type": "boolean",
+      "condition_id": "cond_49"
+    },
+    {
+      "id": "visa_q50",
+      "text": "研修期間は６か月以内です",
+      "type": "boolean",
+      "condition_id": "cond_50"
+    },
+    {
+      "id": "visa_q51",
+      "text": "申請者がEビザの条件を満たします",
+      "type": "boolean",
+      "condition_id": "cond_51"
+    },
+    {
+      "id": "visa_q52",
+      "text": "まだ十分な売り上げがなく、これまでに人件費などのランニングコストを含め、30万ドル以上支出しています",
+      "type": "boolean",
+      "condition_id": "cond_52"
+    },
+    {
+      "id": "visa_q53",
+      "text": "貿易による利益が会社の経費の80％以上をカバーしています",
+      "type": "boolean",
+      "condition_id": "cond_53"
+    },
+    {
+      "id": "visa_q54",
+      "text": "EビザTDY(short-term needs)の条件を満たします",
+      "type": "boolean",
+      "condition_id": "cond_54"
+    },
+    {
+      "id": "visa_q55",
+      "text": "評価・雇用に責任を持つ複数のフルタイムのスタッフを部下に持つマネージャー以上のポジションに就きます",
+      "type": "boolean",
+      "condition_id": "cond_55"
+    },
+    {
+      "id": "visa_q56",
+      "text": "米国拠点の業務に深く関連する5年以上の業務経験があります",
+      "type": "boolean",
+      "condition_id": "cond_56"
+    },
+    {
+      "id": "visa_q57",
+      "text": "申請者がBlanket Lビザの条件を満たします",
+      "type": "boolean",
+      "condition_id": "cond_57"
+    },
+    {
+      "id": "visa_q58",
+      "text": "1年間に10人以上Lビザのペティション申請をしています",
+      "type": "boolean",
+      "condition_id": "cond_58"
+    },
+    {
+      "id": "visa_q59",
+      "text": "会社設立のために、30万ドル以上支出しました（不動産を除く）",
+      "type": "boolean",
+      "condition_id": "cond_59"
+    },
+    {
+      "id": "visa_q60",
+      "text": "Lビザ 質問6",
+      "type": "boolean",
+      "condition_id": "cond_60"
+    },
+    {
+      "id": "visa_q61",
+      "text": "アメリカでは大卒、フルタイムの部下が2名以上います",
+      "type": "boolean",
+      "condition_id": "cond_61"
+    },
+    {
+      "id": "visa_q62",
+      "text": "大卒以上ではありませんが、実務経験が(高卒は12年以上、高専卒は3年以上）あります",
+      "type": "boolean",
+      "condition_id": "cond_62"
+    },
+    {
+      "id": "visa_q63",
+      "text": "申請者に研修に必要な英語力はあります",
+      "type": "boolean",
+      "condition_id": "cond_63"
     }
   ],
-  "rules": [
-    {
-      "id": 1,
-      "description": "E Visa Eligibility",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "same_nationality",
-          "company_meets_e_visa_conditions",
-          "applicant_meets_e_visa_conditions"
-        ]
-      },
-      "conclusion": "E_visa"
-    },
-    {
-      "id": 2,
-      "description": "E Visa Company Requirements",
-      "conditions": {
-        "type": "OR",
-        "conditions": [
-          "company_meets_e_visa_investment_conditions",
-          "company_meets_e_visa_trade_conditions"
-        ]
-      },
-      "conclusion": "company_meets_e_visa_conditions"
-    },
-    {
-      "id": 3,
-      "description": "E Visa Investment Conditions",
-      "conditions": {
-        "type": "OR",
-        "conditions": [
-          "investment_equipment_300k",
-          "acquisition_300k",
-          "running_costs_300k",
-          "establishment_costs_300k"
-        ]
-      },
-      "conclusion": "company_meets_e_visa_investment_conditions"
-    },
-    {
-      "id": 4,
-      "description": "E Visa Trade Conditions",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "trade_50_percent_us_japan",
-          "continuous_trade",
-          "trade_profits_80_percent"
-        ]
-      },
-      "conclusion": "company_meets_e_visa_trade_conditions"
-    },
-    {
-      "id": 5,
-      "description": "E Visa Applicant Requirements",
-      "conditions": {
-        "type": "OR",
-        "conditions": [
-          "applicant_meets_e_visa_manager_conditions",
-          "applicant_meets_e_visa_staff_conditions",
-          "e_visa_tdy_conditions_met"
-        ]
-      },
-      "conclusion": "applicant_meets_e_visa_conditions"
-    },
-    {
-      "id": 6,
-      "description": "E Visa Manager Requirements",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "recognized_manager_position",
-          "sufficient_management_capabilities"
-        ]
-      },
-      "conclusion": "applicant_meets_e_visa_manager_conditions"
-    },
-    {
-      "id": 7,
-      "description": "E Visa Manager Position",
-      "conditions": {
-        "type": "OR",
-        "conditions": [
-          "ceo_or_officer",
-          "business_planning_manager",
-          "manager_multiple_subordinates"
-        ]
-      },
-      "conclusion": "recognized_manager_position"
-    },
-    {
-      "id": 8,
-      "description": "E Visa Management Capability",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "related_experience_2_years",
-          "management_experience_2_years_total"
-        ]
-      },
-      "conclusion": "sufficient_management_capabilities"
-    },
-    {
-      "id": 9,
-      "description": "Management Experience",
-      "conditions": {
-        "type": "OR",
-        "conditions": [
-          "management_experience_2_years",
-          "project_management_2_years"
-        ]
-      },
-      "conclusion": "management_experience_2_years_total"
-    },
-    {
-      "id": 10,
-      "description": "E Visa Staff Requirements",
-      "conditions": {
-        "type": "OR",
-        "conditions": [
-          "stem_graduate_3_years",
-          "stem_undergraduate_4_years",
-          "directly_related_experience_5_years"
-        ]
-      },
-      "conclusion": "applicant_meets_e_visa_staff_conditions"
-    },
-    {
-      "id": 11,
-      "description": "E Visa TDY",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "limited_purpose_2_years",
-          "related_experience_2_years"
-        ]
-      },
-      "conclusion": "e_visa_tdy_conditions_met"
-    },
-    {
-      "id": 12,
-      "description": "Blanket L Visa",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "intracompany_transfer",
-          "company_meets_blanket_l_conditions",
-          "applicant_meets_blanket_l_conditions"
-        ]
-      },
-      "conclusion": "L_blanket"
-    },
-    {
-      "id": 13,
-      "description": "Blanket L Company Requirements",
-      "conditions": {
-        "type": "OR",
-        "conditions": [
-          "us_subsidiary_revenue_25m",
-          "local_employees_1000",
-          "l_petitions_10_per_year"
-        ]
-      },
-      "conclusion": "company_meets_blanket_l_conditions"
-    },
-    {
-      "id": 14,
-      "description": "Blanket L Applicant Requirements",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "overseas_group_1_year_in_3",
-          "meets_manager_staff_conditions_blanket"
-        ]
-      },
-      "conclusion": "applicant_meets_blanket_l_conditions"
-    },
-    {
-      "id": 15,
-      "description": "Blanket L Position Types",
-      "conditions": {
-        "type": "OR",
-        "conditions": [
-          "meets_blanket_l_manager_conditions",
-          "meets_blanket_l_staff_conditions"
-        ]
-      },
-      "conclusion": "meets_manager_staff_conditions_blanket"
-    },
-    {
-      "id": 16,
-      "description": "Blanket L Manager",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "management_experience_2_years_total",
-          "us_role_managerial"
-        ]
-      },
-      "conclusion": "meets_blanket_l_manager_conditions"
-    },
-    {
-      "id": 17,
-      "description": "Blanket L Staff",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "has_specialized_knowledge",
-          "us_role_requires_specialized_knowledge"
-        ]
-      },
-      "conclusion": "meets_blanket_l_staff_conditions"
-    },
-    {
-      "id": 18,
-      "description": "Individual L Visa",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "intracompany_transfer",
-          "meets_individual_l_conditions"
-        ]
-      },
-      "conclusion": "L_individual"
-    },
-    {
-      "id": 19,
-      "description": "Individual L Requirements",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "overseas_group_1_year_in_3",
-          "meets_manager_staff_conditions_individual",
-          "question_6_placeholder"
-        ]
-      },
-      "conclusion": "meets_individual_l_conditions"
-    },
-    {
-      "id": 20,
-      "description": "Individual L Manager",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "management_experience_2_years_total",
-          "us_role_managerial",
-          "college_graduates_subordinates_2"
-        ]
-      },
-      "conclusion": "individual_l_manager_conditions"
-    },
-    {
-      "id": 21,
-      "description": "Individual L Staff",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "has_specialized_knowledge",
-          "us_role_requires_specialized_knowledge"
-        ]
-      },
-      "conclusion": "individual_l_staff_conditions"
-    },
-    {
-      "id": 21.5,
-      "description": "Individual L Position Types",
-      "conditions": {
-        "type": "OR",
-        "conditions": [
-          "individual_l_manager_conditions",
-          "individual_l_staff_conditions"
-        ]
-      },
-      "conclusion": "meets_manager_staff_conditions_individual"
-    },
-    {
-      "id": 22,
-      "description": "H-1B Visa",
-      "conditions": {
-        "type": "OR",
-        "conditions": [
-          "college_degree_matching_job",
-          "degree_with_3_years_experience",
-          "high_school_12_years_experience",
-          "technical_school_3_years_experience"
-        ]
-      },
-      "conclusion": "H1B"
-    },
-    {
-      "id": 23,
-      "description": "B Visa",
-      "conditions": {
-        "type": "OR",
-        "conditions": [
-          "b_visa_conditions_met_esta_approved",
-          "b_visa_conditions_met_esta_not_approved"
-        ]
-      },
-      "conclusion": "B_visa"
-    },
-    {
-      "id": 24,
-      "description": "B Visa with ESTA",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "esta_approved",
-          "commercial_activities",
-          "stay_more_than_90_days",
-          "stay_6_months_or_less"
-        ]
-      },
-      "conclusion": "b_visa_conditions_met_esta_approved"
-    },
-    {
-      "id": 25,
-      "description": "B Visa without ESTA",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "commercial_activities",
-          "stay_6_months_or_less"
-        ]
-      },
-      "conclusion": "b_visa_conditions_met_esta_not_approved"
-    },
-    {
-      "id": 26,
-      "description": "Contract-based B Visa",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "equipment_installation_work",
-          "has_sales_contract",
-          "stay_6_months_or_less"
-        ]
-      },
-      "conclusion": "B_contract"
-    },
-    {
-      "id": 27,
-      "description": "B-1 in lieu of H-1B",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "h1b_level_specialized_work",
-          "stay_6_months_or_less"
-        ]
-      },
-      "conclusion": "B1_in_lieu_H1B"
-    },
-    {
-      "id": 28,
-      "description": "J-1 Visa",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "training_includes_ojt",
-          "training_18_months_or_less",
-          "sufficient_english"
-        ]
-      },
-      "conclusion": "J1"
-    },
-    {
-      "id": 29,
-      "description": "B Visa Training",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "commercial_training",
-          "stay_6_months_or_less"
-        ]
-      },
-      "conclusion": "B_training"
-    },
-    {
-      "id": 30,
-      "description": "B-1 in lieu of H3",
-      "conditions": {
-        "type": "AND",
-        "conditions": [
-          "commercial_training",
-          "stay_6_months_or_less"
-        ]
-      },
-      "conclusion": "B1_in_lieu_H3"
-    }
-  ]
+  "rules": []
 }
