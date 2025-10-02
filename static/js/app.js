@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Start the questionnaire
 async function startQuestionnaire() {
-    showLoading('Loading questions...');
+    showLoading('質問を読み込んでいます...');
 
     try {
         // Clear any previous session
@@ -64,7 +64,7 @@ async function startQuestionnaire() {
 
     } catch (error) {
         console.error('Error starting questionnaire:', error);
-        alert('Failed to start questionnaire. Please try again.');
+        alert('質問の読み込みに失敗しました。もう一度お試しください。');
     } finally {
         hideLoading();
     }
@@ -126,8 +126,8 @@ function createAnswerOptions(question) {
 
     if (question.type === 'boolean') {
         // Yes/No options
-        const yesOption = createAnswerOption('yes', 'Yes', question.id);
-        const noOption = createAnswerOption('no', 'No', question.id);
+        const yesOption = createAnswerOption('yes', 'はい', question.id);
+        const noOption = createAnswerOption('no', 'いいえ', question.id);
 
         answerOptions.appendChild(yesOption);
         answerOptions.appendChild(noOption);
@@ -145,7 +145,7 @@ function createAnswerOptions(question) {
         const input = document.createElement('input');
         input.type = 'number';
         input.className = 'number-input';
-        input.placeholder = 'Enter a number';
+        input.placeholder = '数値を入力';
         input.id = `input-${question.id}`;
 
         if (question.min !== undefined) input.min = question.min;
@@ -242,7 +242,7 @@ async function nextQuestion() {
         }
 
         // Load more questions based on current answers
-        showLoading('Loading next questions...');
+        showLoading('次の質問を読み込んでいます...');
         try {
             await loadQuestions();
             currentState.currentQuestionIndex = 0; // Reset to show new questions
@@ -303,16 +303,16 @@ function updateProgress() {
     progress = Math.min(progress, 95); // Never show 100% until evaluation
 
     progressFill.style.width = `${progress}%`;
-    progressText.textContent = `${answeredCount} questions answered`;
+    progressText.textContent = `${answeredCount} / ${currentState.totalQuestions} 質問に回答済み`;
 }
 
 // Evaluate results
 async function evaluateResults() {
     // Complete the progress bar
     progressFill.style.width = '100%';
-    progressText.textContent = 'Analysis complete';
+    progressText.textContent = '分析完了';
 
-    showLoading('Analyzing your answers...');
+    showLoading('回答を分析中...');
 
     try {
         const response = await fetch('/api/evaluate', {
@@ -337,7 +337,7 @@ async function evaluateResults() {
 
     } catch (error) {
         console.error('Error evaluating results:', error);
-        alert('Failed to evaluate results. Please try again.');
+        alert('結果の評価に失敗しました。もう一度お試しください。');
     } finally {
         hideLoading();
     }
@@ -358,12 +358,12 @@ function displayResults(data) {
         noResults.className = 'no-results';
         noResults.innerHTML = `
             <i class="fas fa-exclamation-circle"></i>
-            <h3>No Suitable Visa Types Found</h3>
-            <p>Based on your answers, we couldn't identify a specific visa type that matches your situation. This doesn't mean you're not eligible for a US visa.</p>
-            <p>We recommend consulting with an immigration attorney who can provide personalized guidance for your specific circumstances.</p>
+            <h3>適切なビザタイプが見つかりませんでした</h3>
+            <p>ご回答いただいた内容から、特定のビザタイプを特定することができませんでした。これは米国ビザの資格がないという意味ではありません。</p>
+            <p>あなたの状況に合わせた個別のガイダンスについては、移民弁護士にご相談されることをお勧めします。</p>
             <button class="btn btn-primary" onclick="restartAssessment()">
                 <i class="fas fa-redo"></i>
-                Try Again
+                最初からやり直す
             </button>
         `;
         resultsContent.appendChild(noResults);
@@ -391,14 +391,14 @@ function createVisaCard(visa, isPrimary = false) {
                 <p>${visa.description}</p>
             </div>
             <div class="confidence-badge ${confidenceClass}">
-                ${confidencePercent}% Match
+                適合度 ${confidencePercent}%
             </div>
         </div>
 
         <div class="visa-details">
             ${visa.satisfied_conditions.length > 0 ? `
                 <div class="conditions-section">
-                    <h4><i class="fas fa-check-circle" style="color: #27ae60;"></i> Requirements You Meet</h4>
+                    <h4><i class="fas fa-check-circle" style="color: #27ae60;"></i> 満たされた要件</h4>
                     <ul class="condition-list">
                         ${visa.satisfied_conditions.map(condition => `
                             <li class="condition-item satisfied">
@@ -412,7 +412,7 @@ function createVisaCard(visa, isPrimary = false) {
 
             ${visa.missing_conditions.length > 0 ? `
                 <div class="conditions-section">
-                    <h4><i class="fas fa-exclamation-circle" style="color: #e74c3c;"></i> Additional Requirements</h4>
+                    <h4><i class="fas fa-exclamation-circle" style="color: #e74c3c;"></i> 追加の要件</h4>
                     <ul class="condition-list">
                         ${visa.missing_conditions.map(condition => `
                             <li class="condition-item missing">
@@ -432,11 +432,11 @@ function createVisaCard(visa, isPrimary = false) {
 // Export results to PDF
 async function exportToPDF() {
     if (!window.evaluationResults) {
-        alert('No results to export');
+        alert('エクスポートする結果がありません');
         return;
     }
 
-    showLoading('Generating PDF...');
+    showLoading('PDFを生成中...');
 
     try {
         const response = await fetch('/api/export/pdf', {
@@ -447,8 +447,8 @@ async function exportToPDF() {
             body: JSON.stringify({
                 applicable_visas: window.evaluationResults.applicable_visas,
                 user_info: {
-                    'Assessment Date': new Date().toLocaleDateString(),
-                    'Total Questions Answered': Object.keys(currentState.answers).length
+                    '評価日': new Date().toLocaleDateString('ja-JP'),
+                    '回答した質問数': Object.keys(currentState.answers).length
                 }
             })
         });
@@ -462,12 +462,12 @@ async function exportToPDF() {
             link.download = data.filename;
             link.click();
         } else {
-            throw new Error(data.error || 'Failed to generate PDF');
+            throw new Error(data.error || 'PDFの生成に失敗しました');
         }
 
     } catch (error) {
         console.error('Error exporting PDF:', error);
-        alert('Failed to generate PDF. Please try again.');
+        alert('PDFの生成に失敗しました。もう一度お試しください。');
     } finally {
         hideLoading();
     }
@@ -475,7 +475,7 @@ async function exportToPDF() {
 
 // Restart assessment
 async function restartAssessment() {
-    showLoading('Restarting assessment...');
+    showLoading('リセット中...');
 
     try {
         // Clear session
@@ -512,7 +512,7 @@ function hideAllSections() {
     resultsSection.style.display = 'none';
 }
 
-function showLoading(message = 'Loading...') {
+function showLoading(message = '読み込み中...') {
     currentState.isLoading = true;
     loadingOverlay.style.display = 'flex';
     loadingOverlay.querySelector('p').textContent = message;
