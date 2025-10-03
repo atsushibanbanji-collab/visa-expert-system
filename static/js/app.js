@@ -4,11 +4,13 @@ let currentState = {
     questions: [],
     answers: {},
     totalQuestions: 0,
-    isLoading: false
+    isLoading: false,
+    selectedVisaType: null
 };
 
 // DOM Elements
 const welcomeSection = document.getElementById('welcomeSection');
+const visaTypeSection = document.getElementById('visaTypeSection');
 const questionnaireSection = document.getElementById('questionnaireSection');
 const resultsSection = document.getElementById('resultsSection');
 const progressContainer = document.getElementById('progressContainer');
@@ -32,6 +34,18 @@ const resultsContent = document.getElementById('resultsContent');
 document.addEventListener('DOMContentLoaded', function() {
     console.log('US Visa Expert System initialized');
 });
+
+// Show visa type selection
+function showVisaTypeSelection() {
+    hideAllSections();
+    visaTypeSection.style.display = 'block';
+}
+
+// Select visa type and start questionnaire
+async function selectVisaType(visaType) {
+    currentState.selectedVisaType = visaType;
+    await startQuestionnaire();
+}
 
 // Start the questionnaire
 async function startQuestionnaire() {
@@ -74,7 +88,8 @@ async function startQuestionnaire() {
 async function loadQuestions() {
     try {
         const answeredQuestions = Object.keys(currentState.answers).join(',');
-        const response = await fetch(`/api/questions?answered=${answeredQuestions}`);
+        const visaTypeParam = currentState.selectedVisaType ? `&visa_type=${currentState.selectedVisaType}` : '';
+        const response = await fetch(`/api/questions?answered=${answeredQuestions}${visaTypeParam}`);
         const data = await response.json();
 
         currentState.questions = data.questions;

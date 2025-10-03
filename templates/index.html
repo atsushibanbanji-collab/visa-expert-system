@@ -57,10 +57,41 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-primary start-btn" onclick="startQuestionnaire()">
+                    <button class="btn btn-primary start-btn" onclick="showVisaTypeSelection()">
                         <i class="fas fa-play"></i>
                         ビザ診断を開始
                     </button>
+                </div>
+            </div>
+
+            <!-- Visa Type Selection Screen -->
+            <div class="section" id="visaTypeSection" style="display: none;">
+                <div class="welcome-card">
+                    <h2>申請を検討しているビザタイプを選択してください</h2>
+                    <p style="margin-bottom: 40px;">該当するビザに関する質問のみが表示されます</p>
+
+                    <div class="visa-type-options">
+                        <button class="visa-type-option" onclick="selectVisaType('E')">
+                            <i class="fas fa-briefcase"></i>
+                            <h3>Eビザ</h3>
+                            <p>条約貿易商・投資家</p>
+                        </button>
+                        <button class="visa-type-option" onclick="selectVisaType('L')">
+                            <i class="fas fa-building"></i>
+                            <h3>Lビザ</h3>
+                            <p>企業内転勤</p>
+                        </button>
+                        <button class="visa-type-option" onclick="selectVisaType('B')">
+                            <i class="fas fa-plane"></i>
+                            <h3>Bビザ</h3>
+                            <p>商用・観光・研修</p>
+                        </button>
+                        <button class="visa-type-option" onclick="selectVisaType('H')">
+                            <i class="fas fa-user-graduate"></i>
+                            <h3>H-1Bビザ</h3>
+                            <p>専門職</p>
+                        </button>
+                    </div>
                 </div>
             </div>
 
