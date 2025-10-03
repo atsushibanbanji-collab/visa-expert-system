@@ -141,17 +141,12 @@ def get_questions():
     """Get all questions or next questions based on current progress"""
     answered = request.args.get('answered', '')
     answered_list = answered.split(',') if answered else []
-    visa_type = request.args.get('visa_type', None)
 
     next_questions = rule_engine.get_next_questions(answered_list)
 
-    # Filter by visa type if specified
-    if visa_type:
-        next_questions = [q for q in next_questions if visa_type in q.get('visa_types', [])]
-
     return jsonify({
         'questions': next_questions[:1],  # Return 1 question at a time
-        'total_questions': len([q for q in rule_engine.questions if not visa_type or visa_type in q.get('visa_types', [])]),
+        'total_questions': len(rule_engine.questions),
         'answered_count': len(answered_list)
     })
 
