@@ -53,6 +53,35 @@
   },
   "questions": [
     {
+      "id": "screening_q1",
+      "text": "米国渡航の主な目的は何ですか？",
+      "type": "multiple_choice",
+      "condition_id": "screening_purpose",
+      "is_screening": true,
+      "options": [
+        {
+          "value": "business_investment",
+          "text": "自社の米国拠点の経営・管理（投資家・貿易商）",
+          "visa_types": ["E"]
+        },
+        {
+          "value": "intra_company_transfer",
+          "text": "企業内転勤（日本の親会社から米国支社へ）",
+          "visa_types": ["L"]
+        },
+        {
+          "value": "short_term_business",
+          "text": "短期商用・研修・ミーティング",
+          "visa_types": ["B"]
+        },
+        {
+          "value": "specialized_work",
+          "text": "専門職として就労（大卒以上の専門知識が必要な仕事）",
+          "visa_types": ["H"]
+        }
+      ]
+    },
+    {
       "id": "visa_q1",
       "text": "申請者と会社の国籍が同じです",
       "type": "boolean",

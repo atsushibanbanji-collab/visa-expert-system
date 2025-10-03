@@ -120,10 +120,27 @@ class VisaRuleEngine:
         collect_conditions(visa_type)
         return list(conditions)
 
-    def get_next_questions(self, answered_questions):
-        """Get all unanswered questions in order"""
+    def get_next_questions(self, answered_questions, visa_types_filter=None):
+        """Get all unanswered questions in order, optionally filtered by visa types"""
         answered_set = set(answered_questions)
         unanswered = [q for q in self.questions if q['id'] not in answered_set]
+
+        # Filter by visa types if specified
+        if visa_types_filter and len(visa_types_filter) > 0:
+            filtered = []
+            for q in unanswered:
+                # Always include screening questions
+                if q.get('is_screening', False):
+                    filtered.append(q)
+                    continue
+                # Include questions without visa_types (universal questions)
+                if not q.get('visa_types'):
+                    filtered.append(q)
+                    continue
+                # Include questions matching selected visa types
+                if any(vt in q.get('visa_types', []) for vt in visa_types_filter):
+                    filtered.append(q)
+            unanswered = filtered
 
         # Return all unanswered questions
         return unanswered
@@ -139,16 +156,36 @@ def index():
 @app.route('/api/questions')
 def get_questions():
     """Get all questions or next questions based on current progress"""
-    answered = request.args.get('answered', '')
-    answered_list = answered.split(',') if answered else []
+    try:
+        answered = request.args.get('answered', '')
+        answered_list = [a for a in answered.split(',') if a] if answered else []
+        visa_types = request.args.get('visa_types', '')
+        visa_types_list = [v for v in visa_types.split(',') if v] if visa_types else []
 
-    next_questions = rule_engine.get_next_questions(answered_list)
+        next_questions = rule_engine.get_next_questions(answered_list, visa_types_list)
 
-    return jsonify({
-        'questions': next_questions[:1],  # Return 1 question at a time
-        'total_questions': len(rule_engine.questions),
-        'answered_count': len(answered_list)
-    })
+        # Calculate total questions based on visa type filter
+        if visa_types_list:
+            total_questions = len([q for q in rule_engine.questions
+                                  if q.get('is_screening', False) or
+                                     not q.get('visa_types') or
+                                     any(vt in q.get('visa_types', []) for vt in visa_types_list)])
+        else:
+            total_questions = len(rule_engine.questions)
+
+        return jsonify({
+            'questions': next_questions[:1],  # Return 1 question at a time
+            'total_questions': total_questions,
+            'answered_count': len(answered_list)
+        })
+    except Exception as e:
+        print(f"Error in get_questions: {str(e)}")
+        return jsonify({
+            'error': str(e),
+            'questions': [],
+            'total_questions': 0,
+            'answered_count': 0
+        }), 500
 
 @app.route('/api/evaluate', methods=['POST'])
 def evaluate_visa():

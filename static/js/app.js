@@ -4,7 +4,8 @@ let currentState = {
     questions: [],
     answers: {},
     totalQuestions: 0,
-    isLoading: false
+    isLoading: false,
+    selectedVisaTypes: []
 };
 
 // DOM Elements
@@ -74,7 +75,10 @@ async function startQuestionnaire() {
 async function loadQuestions() {
     try {
         const answeredQuestions = Object.keys(currentState.answers).join(',');
-        const response = await fetch(`/api/questions?answered=${answeredQuestions}`);
+        const visaTypesParam = currentState.selectedVisaTypes.length > 0
+            ? `&visa_types=${currentState.selectedVisaTypes.join(',')}`
+            : '';
+        const response = await fetch(`/api/questions?answered=${answeredQuestions}${visaTypesParam}`);
         const data = await response.json();
 
         currentState.questions = data.questions;
@@ -197,6 +201,17 @@ function createAnswerOption(value, text, questionId) {
         // Store answer
         const answerValue = value === 'yes' ? true : value === 'no' ? false : value;
         currentState.answers[questionId] = answerValue;
+
+        // Check if this is a screening question
+        const currentQuestion = currentState.questions[currentState.currentQuestionIndex];
+        if (currentQuestion && currentQuestion.is_screening && currentQuestion.options) {
+            // Find selected option and extract visa types
+            const selectedOption = currentQuestion.options.find(opt => opt.value === value);
+            if (selectedOption && selectedOption.visa_types) {
+                currentState.selectedVisaTypes = selectedOption.visa_types;
+                console.log('Selected visa types:', currentState.selectedVisaTypes);
+            }
+        }
 
         // Update navigation
         updateNavigationButtons();
