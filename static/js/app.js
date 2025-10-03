@@ -295,9 +295,6 @@ function goBack() {
 function updateProgress() {
     const answeredCount = Object.keys(currentState.answers).length;
 
-    // Use dynamic total based on answered questions
-    let estimatedTotal = Math.max(currentState.totalQuestions, answeredCount + currentState.questions.length);
-
     // Cap the progress to make it feel more responsive
     let progress;
     if (answeredCount <= 8) {
@@ -309,7 +306,7 @@ function updateProgress() {
     progress = Math.min(progress, 95); // Never show 100% until evaluation
 
     progressFill.style.width = `${progress}%`;
-    progressText.textContent = `${answeredCount} / ${currentState.totalQuestions} 質問に回答済み`;
+    progressText.textContent = `${answeredCount} 質問に回答済み`;
 }
 
 // Evaluate results

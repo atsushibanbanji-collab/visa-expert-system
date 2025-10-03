@@ -78,6 +78,11 @@
           "value": "specialized_work",
           "text": "専門職として就労（大卒以上の専門知識が必要な仕事）",
           "visa_types": ["H"]
+        },
+        {
+          "value": "exchange_visitor",
+          "text": "交流訪問・インターンシップ・研究",
+          "visa_types": ["J"]
         }
       ]
     },
