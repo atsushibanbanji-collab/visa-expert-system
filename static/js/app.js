@@ -22,7 +22,6 @@ const questionText = document.getElementById('questionText');
 const questionNote = document.getElementById('questionNote');
 const answerOptions = document.getElementById('answerOptions');
 const currentQuestionNum = document.getElementById('currentQuestionNum');
-const totalQuestions = document.getElementById('totalQuestions');
 const backBtn = document.getElementById('backBtn');
 const nextBtn = document.getElementById('nextBtn');
 
@@ -78,13 +77,26 @@ async function loadQuestions() {
         const visaTypesParam = currentState.selectedVisaTypes.length > 0
             ? `&visa_types=${currentState.selectedVisaTypes.join(',')}`
             : '';
-        const response = await fetch(`/api/questions?answered=${answeredQuestions}${visaTypesParam}`);
+        const url = `/api/questions?answered=${answeredQuestions}${visaTypesParam}`;
+        console.log('Loading questions from:', url);
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('API error response:', errorText);
+            throw new Error(`API returned ${response.status}: ${errorText}`);
+        }
+
         const data = await response.json();
+        console.log('Loaded questions:', data);
 
-        currentState.questions = data.questions;
-        currentState.totalQuestions = data.total_questions;
+        if (!data.questions || data.questions.length === 0) {
+            console.warn('No questions returned from API');
+        }
 
-        totalQuestions.textContent = currentState.totalQuestions;
+        currentState.questions = data.questions || [];
+        currentState.totalQuestions = data.total_questions || 0;
 
     } catch (error) {
         console.error('Error loading questions:', error);
