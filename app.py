@@ -120,10 +120,20 @@ class VisaRuleEngine:
         collect_conditions(visa_type)
         return list(conditions)
 
-    def get_next_questions(self, answered_questions):
-        """Get all unanswered questions in order"""
+    def get_next_questions(self, answered_questions, visa_types_filter=None):
+        """Get all unanswered questions in order, optionally filtered by visa types"""
         answered_set = set(answered_questions)
         unanswered = [q for q in self.questions if q['id'] not in answered_set]
+
+        # Filter by visa types if specified
+        if visa_types_filter and len(visa_types_filter) > 0:
+            # Always include screening questions
+            # Include questions that don't have visa_types (universal questions)
+            # Include questions that match any of the selected visa types
+            unanswered = [q for q in unanswered if
+                         q.get('is_screening', False) or
+                         not q.get('visa_types') or
+                         any(vt in q.get('visa_types', []) for vt in visa_types_filter)]
 
         # Return all unanswered questions
         return unanswered
@@ -141,12 +151,21 @@ def get_questions():
     """Get all questions or next questions based on current progress"""
     answered = request.args.get('answered', '')
     answered_list = answered.split(',') if answered else []
+    visa_types = request.args.get('visa_types', '')
+    visa_types_list = visa_types.split(',') if visa_types else []
 
-    next_questions = rule_engine.get_next_questions(answered_list)
+    next_questions = rule_engine.get_next_questions(answered_list, visa_types_list)
+
+    # Calculate total questions based on visa type filter
+    if visa_types_list:
+        total_questions = len([q for q in rule_engine.questions
+                              if not q.get('visa_types') or any(vt in q.get('visa_types', []) for vt in visa_types_list)])
+    else:
+        total_questions = len(rule_engine.questions)
 
     return jsonify({
         'questions': next_questions[:1],  # Return 1 question at a time
-        'total_questions': len(rule_engine.questions),
+        'total_questions': total_questions,
         'answered_count': len(answered_list)
     })
 
