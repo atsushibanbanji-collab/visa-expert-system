@@ -47,7 +47,8 @@ async function startQuestionnaire() {
             questions: [],
             answers: {},
             totalQuestions: 0,
-            isLoading: false
+            isLoading: false,
+            selectedVisaTypes: []
         };
 
         // Load initial questions
@@ -502,7 +503,8 @@ async function restartAssessment() {
             questions: [],
             answers: {},
             totalQuestions: 0,
-            isLoading: false
+            isLoading: false,
+            selectedVisaTypes: []
         };
 
         // Clear results
