@@ -162,7 +162,10 @@ def get_questions():
         visa_types = request.args.get('visa_types', '')
         visa_types_list = [v for v in visa_types.split(',') if v] if visa_types else []
 
+        print(f"[API] Getting questions - answered: {len(answered_list)}, visa_types: {visa_types_list}")
+
         next_questions = rule_engine.get_next_questions(answered_list, visa_types_list)
+        print(f"[API] Returning {len(next_questions)} questions")
 
         # Calculate total questions based on visa type filter
         if visa_types_list:
@@ -179,9 +182,14 @@ def get_questions():
             'answered_count': len(answered_list)
         })
     except Exception as e:
-        print(f"Error in get_questions: {str(e)}")
+        import traceback
+        error_msg = str(e)
+        error_trace = traceback.format_exc()
+        print(f"[ERROR] in get_questions: {error_msg}")
+        print(f"[ERROR] Traceback:\n{error_trace}")
         return jsonify({
-            'error': str(e),
+            'error': error_msg,
+            'traceback': error_trace,
             'questions': [],
             'total_questions': 0,
             'answered_count': 0
