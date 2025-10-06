@@ -146,45 +146,21 @@ class VisaRuleEngine:
         return unanswered
 
 # Initialize the rule engines
-# Use sequential E-visa questions
+# Use decision tree E-visa engine
 try:
-    with open('e_visa_sequential.json', 'r', encoding='utf-8') as f:
-        e_visa_data = json.load(f)
-    # Create a simple engine with sequential questions
-    class SimpleEngine:
-        def __init__(self, data):
-            self.questions = data['questions']
-            self.total_questions = data['total_questions']
-
-        def get_next_questions(self, answered_questions, visa_types_filter=None):
-            answered_set = set(answered_questions)
-            unanswered = [q for q in self.questions if q['id'] not in answered_set]
-            return unanswered
-
-        def get_applicable_visas(self, user_answers):
-            # Count yes answers
-            yes_count = sum(1 for a in user_answers.values() if a is True)
-            total = len(user_answers)
-            confidence = yes_count / total if total > 0 else 0
-
-            if confidence >= 0.7:
-                return [{
-                    'type': 'E_visa',
-                    'name': 'Eビザ（条約貿易商・投資家）',
-                    'description': 'あなたの状況はEビザの要件を満たしています。',
-                    'color': '#4CAF50',
-                    'satisfied_conditions': [],
-                    'missing_conditions': [],
-                    'confidence': confidence
-                }], {}
-            else:
-                return [], {}
-
-    rule_engine = SimpleEngine(e_visa_data)
+    from e_visa_engine import EVisaDecisionEngine
+    e_visa_engine = EVisaDecisionEngine('e_visa_rules.json')
+    print("E-visa decision tree engine loaded successfully")
 except Exception as e:
-    print(f"Error loading e_visa_sequential.json: {e}")
-    # Fallback to original
+    print(f"Error loading e_visa_engine: {e}")
+    e_visa_engine = None
+
+# Fallback to original rules engine
+try:
     rule_engine = VisaRuleEngine('rules.json')
+except Exception as e:
+    print(f"Error loading rules.json: {e}")
+    rule_engine = None
 
 @app.route('/')
 def index():

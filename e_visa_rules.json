@@ -8,120 +8,120 @@
     "root": "nationality_check",
     "nodes": {
       "nationality_check": {
-        "question": "申請者と会社の国籍が同じですか？（日本国籍の申請者が日本企業から派遣される場合）",
+        "question": "あなたは日本国籍で、日本の会社から派遣されますか？",
         "type": "boolean",
         "yes": "company_type",
         "no": "result_nationality_fail"
       },
       "company_type": {
-        "question": "会社の米国での事業形態は？",
+        "question": "あなたの会社は米国でどのような事業を行っていますか？",
         "type": "multiple_choice",
         "options": [
           {
             "value": "trader",
-            "text": "貿易商（日米間で商品・サービスの取引）",
+            "text": "日本と米国の間で商品やサービスを取引している",
             "next": "trader_volume"
           },
           {
             "value": "investor",
-            "text": "投資家（米国に30万ドル以上投資済み・予定）",
+            "text": "米国に約3000万円以上を投資している（投資予定を含む）",
             "next": "investor_amount"
           },
           {
             "value": "both",
-            "text": "貿易と投資の両方",
+            "text": "取引も投資も両方している",
             "next": "trader_volume"
           }
         ]
       },
       "trader_volume": {
-        "question": "会社の貿易取引の50%以上が日米間で行われていますか？",
+        "question": "会社の取引の半分以上が日本と米国の間で行われていますか？",
         "type": "boolean",
         "yes": "trader_substantiality",
         "no": "result_trader_volume_fail"
       },
       "trader_substantiality": {
-        "question": "日米間の貿易取引は継続的で相当な規模（substantial）ですか？\n※多数の取引、または大規模な取引が継続的に行われている",
+        "question": "日本と米国の間での取引は定期的に続いていますか？\n（毎月のように取引がある、または大きな取引が定期的にある）",
         "type": "boolean",
         "yes": "applicant_role",
         "no": "result_trader_substantiality_fail"
       },
       "investor_amount": {
-        "question": "米国事業への投資額は30万ドル以上ですか？\n※減価償却前の設備・建物が財務諸表に計上されている",
+        "question": "米国の事業に約3000万円以上を投資していますか？\n（土地・建物・設備・運営費用などの合計）",
         "type": "boolean",
         "yes": "applicant_role",
         "no": "result_investor_amount_fail"
       },
       "applicant_role": {
-        "question": "申請者の役職は？",
+        "question": "あなたの役職はどれに当てはまりますか？",
         "type": "multiple_choice",
         "options": [
           {
             "value": "executive",
-            "text": "経営幹部（CEO、COO等のオフィサー）",
+            "text": "経営者・役員（社長、副社長、取締役など）",
             "next": "executive_experience"
           },
           {
             "value": "manager",
-            "text": "マネージャー（部門管理職、重要な意思決定権限あり）",
+            "text": "管理職（部門長、課長など、部下の採用や評価を行う）",
             "next": "manager_experience"
           },
           {
             "value": "specialist",
-            "text": "専門職（特殊スキルを持つスタッフ）",
+            "text": "専門職（特別な技術や知識を持つスタッフ）",
             "next": "specialist_skills"
           },
           {
             "value": "other",
-            "text": "その他",
+            "text": "一般社員",
             "next": "result_role_fail"
           }
         ]
       },
       "executive_experience": {
-        "question": "米国での役職に深く関連する業務経験が2年以上ありますか？",
+        "question": "米国で行う仕事と同じような業務の経験が2年以上ありますか？",
         "type": "boolean",
         "yes": "result_e_visa_approved",
         "no": "result_experience_fail"
       },
       "manager_experience": {
-        "question": "以下のいずれかを満たしますか？",
+        "question": "以下のいずれかに当てはまりますか？",
         "type": "multiple_choice",
         "options": [
           {
             "value": "manager_exp",
-            "text": "2年以上のマネージャー経験がある",
+            "text": "管理職として2年以上働いた経験がある",
             "next": "result_e_visa_approved"
           },
           {
             "value": "related_exp",
-            "text": "米国での業務に深く関連する2年以上の経験がある",
+            "text": "米国で行う仕事と同じような業務の経験が2年以上ある",
             "next": "result_e_visa_approved"
           },
           {
             "value": "neither",
-            "text": "どちらも満たさない",
+            "text": "どちらも当てはまらない",
             "next": "result_experience_fail"
           }
         ]
       },
       "specialist_skills": {
-        "question": "以下のいずれかを満たしますか？",
+        "question": "以下のいずれかに当てはまりますか？",
         "type": "multiple_choice",
         "options": [
           {
             "value": "masters_tech",
-            "text": "理系の大学院卒で、米国での技術系業務に深く関連する3年以上の経験がある",
+            "text": "理系の大学院を卒業していて、技術系の仕事の経験が3年以上ある",
             "next": "result_e_visa_approved"
           },
           {
             "value": "special_skills",
-            "text": "米国事業に不可欠な特殊な技能・知識がある",
+            "text": "米国の事業に必要な特別な技術や知識を持っている",
             "next": "result_e_visa_approved"
           },
           {
             "value": "neither",
-            "text": "どちらも満たさない",
+            "text": "どちらも当てはまらない",
             "next": "result_role_fail"
           }
         ]
