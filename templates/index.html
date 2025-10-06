@@ -36,14 +36,32 @@
                     <div class="welcome-icon">
                         <i class="fas fa-globe-americas"></i>
                     </div>
-                    <h2>Eビザ申請資格診断システム</h2>
-                    <p>このシステムは、あなたがEビザ（条約貿易商・投資家）の申請資格を満たしているかを最小限の質問で診断します。</p>
+                    <h2>米国ビザ申請資格診断システム</h2>
+                    <p>このシステムは、あなたのビザ申請資格を最小限の質問で診断します。<br>まず、診断したいビザのタイプを選択してください。</p>
+
+                    <div class="visa-type-options">
+                        <div class="visa-type-option" onclick="selectVisaType('E')">
+                            <i class="fas fa-briefcase"></i>
+                            <h3>Eビザ</h3>
+                            <p>条約貿易商・投資家</p>
+                        </div>
+                        <div class="visa-type-option" onclick="selectVisaType('L')">
+                            <i class="fas fa-building"></i>
+                            <h3>Lビザ</h3>
+                            <p>企業内転勤</p>
+                        </div>
+                        <div class="visa-type-option" onclick="selectVisaType('B')">
+                            <i class="fas fa-plane"></i>
+                            <h3>Bビザ</h3>
+                            <p>短期商用・観光</p>
+                        </div>
+                    </div>
 
                     <div class="features">
                         <div class="feature">
                             <i class="fas fa-route"></i>
                             <h3>最小質問数</h3>
-                            <p>最適化された質問フローで5-8問で診断完了</p>
+                            <p>最適化された質問フローで効率的に診断</p>
                         </div>
                         <div class="feature">
                             <i class="fas fa-bolt"></i>
@@ -56,11 +74,6 @@
                             <p>申請可否と理由、次のステップを明示</p>
                         </div>
                     </div>
-
-                    <button class="btn btn-primary start-btn" onclick="startQuestionnaire()">
-                        <i class="fas fa-play"></i>
-                        ビザ診断を開始
-                    </button>
                 </div>
             </div>
 

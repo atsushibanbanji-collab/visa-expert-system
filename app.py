@@ -146,14 +146,14 @@ class VisaRuleEngine:
         return unanswered
 
 # Initialize the rule engines
-# Use decision tree E-visa engine
+# Use multi-visa engine
 try:
-    from e_visa_engine import EVisaDecisionEngine
-    e_visa_engine = EVisaDecisionEngine('e_visa_rules.json')
-    print("E-visa decision tree engine loaded successfully")
+    from multi_visa_engine import MultiVisaEngine
+    multi_visa_engine = MultiVisaEngine()
+    print("Multi-visa decision tree engine loaded successfully")
 except Exception as e:
-    print(f"Error loading e_visa_engine: {e}")
-    e_visa_engine = None
+    print(f"Error loading multi_visa_engine: {e}")
+    multi_visa_engine = None
 
 # Fallback to original rules engine
 try:
@@ -334,18 +334,21 @@ def clear_session():
     session.clear()
     return jsonify({'success': True})
 
-@app.route('/api/evisa/question')
-def get_evisa_question():
-    """Get current E-visa question based on answers"""
+@app.route('/api/visa/question')
+def get_visa_question():
+    """Get current visa question based on visa type"""
     try:
-        # Get current node from session or start at root
-        current_node = session.get('evisa_current_node', e_visa_engine.decision_tree['root'])
-        answers = session.get('evisa_answers', {})
+        visa_type = request.args.get('type', 'E')
 
-        print(f"[E-VISA] Getting question for node: {current_node}")
+        # Get current node from session or start at root
+        engine = multi_visa_engine.get_engine(visa_type)
+        current_node = session.get(f'{visa_type}_current_node', engine.decision_tree['root'])
+        answers = session.get(f'{visa_type}_answers', {})
+
+        print(f"[{visa_type}-VISA] Getting question for node: {current_node}")
 
         # Get the question or result
-        question_data = e_visa_engine.get_current_question(current_node, answers)
+        question_data = engine.get_current_question(current_node, answers)
 
         return jsonify({
             'success': True,
@@ -353,47 +356,49 @@ def get_evisa_question():
             'data': question_data,
             'progress': {
                 'answered': len(answers),
-                'path': session.get('evisa_path', [current_node])
+                'path': session.get(f'{visa_type}_path', [current_node])
             }
         })
 
     except Exception as e:
         import traceback
-        print(f"[ERROR] in get_evisa_question: {str(e)}")
+        print(f"[ERROR] in get_visa_question: {str(e)}")
         print(traceback.format_exc())
         return jsonify({
             'success': False,
             'error': str(e)
         }), 500
 
-@app.route('/api/evisa/answer', methods=['POST'])
-def submit_evisa_answer():
+@app.route('/api/visa/answer', methods=['POST'])
+def submit_visa_answer():
     """Submit answer and get next question"""
     try:
+        visa_type = request.args.get('type', 'E')
         data = request.json
         node_id = data.get('node_id')
         answer = data.get('answer')
 
-        print(f"[E-VISA] Answer submitted - node: {node_id}, answer: {answer}")
+        print(f"[{visa_type}-VISA] Answer submitted - node: {node_id}, answer: {answer}")
 
         # Get current answers from session
-        answers = session.get('evisa_answers', {})
-        path = session.get('evisa_path', [e_visa_engine.decision_tree['root']])
+        engine = multi_visa_engine.get_engine(visa_type)
+        answers = session.get(f'{visa_type}_answers', {})
+        path = session.get(f'{visa_type}_path', [engine.decision_tree['root']])
 
         # Store the answer
         answers[node_id] = answer
-        session['evisa_answers'] = answers
+        session[f'{visa_type}_answers'] = answers
 
         # Get next node
-        next_node = e_visa_engine.get_next_node(node_id, answer)
+        next_node = engine.get_next_node(node_id, answer)
 
         if next_node:
             path.append(next_node)
-            session['evisa_path'] = path
-            session['evisa_current_node'] = next_node
+            session[f'{visa_type}_path'] = path
+            session[f'{visa_type}_current_node'] = next_node
 
             # Get the next question or result
-            next_data = e_visa_engine.get_current_question(next_node, answers)
+            next_data = engine.get_current_question(next_node, answers)
 
             return jsonify({
                 'success': True,
@@ -412,19 +417,20 @@ def submit_evisa_answer():
 
     except Exception as e:
         import traceback
-        print(f"[ERROR] in submit_evisa_answer: {str(e)}")
+        print(f"[ERROR] in submit_visa_answer: {str(e)}")
         print(traceback.format_exc())
         return jsonify({
             'success': False,
             'error': str(e)
         }), 500
 
-@app.route('/api/evisa/reset', methods=['POST'])
-def reset_evisa():
-    """Reset E-visa assessment"""
-    session.pop('evisa_current_node', None)
-    session.pop('evisa_answers', None)
-    session.pop('evisa_path', None)
+@app.route('/api/visa/reset', methods=['POST'])
+def reset_visa():
+    """Reset visa assessment"""
+    visa_type = request.args.get('type', 'E')
+    session.pop(f'{visa_type}_current_node', None)
+    session.pop(f'{visa_type}_answers', None)
+    session.pop(f'{visa_type}_path', None)
     return jsonify({'success': True})
 
 if __name__ == '__main__':

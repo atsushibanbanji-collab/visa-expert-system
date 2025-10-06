@@ -1,5 +1,6 @@
-// E-Visa Application State
+// Visa Application State
 let currentState = {
+    visaType: null,  // 'E', 'L', or 'B'
     currentNode: null,
     answers: {},
     isLoading: false
@@ -27,19 +28,32 @@ const resultsContent = document.getElementById('resultsContent');
 
 // Initialize Application
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('E-Visa Expert System initialized');
+    console.log('Multi-Visa Expert System initialized');
 });
+
+// Select visa type
+function selectVisaType(visaType) {
+    currentState.visaType = visaType;
+    console.log(`Selected visa type: ${visaType}`);
+    startQuestionnaire();
+}
 
 // Start the questionnaire
 async function startQuestionnaire() {
+    if (!currentState.visaType) {
+        alert('ビザタイプを選択してください');
+        return;
+    }
     showLoading('診断を開始しています...');
 
     try {
-        // Reset E-visa session
-        await fetch('/api/evisa/reset', { method: 'POST' });
+        // Reset session with visa type
+        await fetch(`/api/visa/reset?type=${currentState.visaType}`, { method: 'POST' });
 
-        // Reset state
+        // Reset state (keep visa type)
+        const visaType = currentState.visaType;
         currentState = {
+            visaType: visaType,
             currentNode: null,
             answers: {},
             isLoading: false
@@ -65,7 +79,7 @@ async function startQuestionnaire() {
 // Load current question
 async function loadQuestion() {
     try {
-        const response = await fetch('/api/evisa/question');
+        const response = await fetch(`/api/visa/question?type=${currentState.visaType}`);
         const data = await response.json();
 
         if (!data.success) {
@@ -153,7 +167,7 @@ async function submitAnswer(answer) {
     currentState.isLoading = true;
 
     try {
-        const response = await fetch('/api/evisa/answer', {
+        const response = await fetch(`/api/visa/answer?type=${currentState.visaType}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
