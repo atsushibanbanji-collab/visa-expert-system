@@ -145,8 +145,12 @@ class VisaRuleEngine:
         # Return all unanswered questions
         return unanswered
 
-# Initialize the rule engine
+# Initialize the rule engines
 rule_engine = VisaRuleEngine('rules.json')
+
+# Import E-visa engine
+from e_visa_engine import EVisaDecisionEngine
+e_visa_engine = EVisaDecisionEngine('e_visa_rules.json')
 
 @app.route('/')
 def index():
@@ -318,6 +322,99 @@ def export_pdf():
 def clear_session():
     """Clear the current session"""
     session.clear()
+    return jsonify({'success': True})
+
+@app.route('/api/evisa/question')
+def get_evisa_question():
+    """Get current E-visa question based on answers"""
+    try:
+        # Get current node from session or start at root
+        current_node = session.get('evisa_current_node', e_visa_engine.decision_tree['root'])
+        answers = session.get('evisa_answers', {})
+
+        print(f"[E-VISA] Getting question for node: {current_node}")
+
+        # Get the question or result
+        question_data = e_visa_engine.get_current_question(current_node, answers)
+
+        return jsonify({
+            'success': True,
+            'current_node': current_node,
+            'data': question_data,
+            'progress': {
+                'answered': len(answers),
+                'path': session.get('evisa_path', [current_node])
+            }
+        })
+
+    except Exception as e:
+        import traceback
+        print(f"[ERROR] in get_evisa_question: {str(e)}")
+        print(traceback.format_exc())
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/evisa/answer', methods=['POST'])
+def submit_evisa_answer():
+    """Submit answer and get next question"""
+    try:
+        data = request.json
+        node_id = data.get('node_id')
+        answer = data.get('answer')
+
+        print(f"[E-VISA] Answer submitted - node: {node_id}, answer: {answer}")
+
+        # Get current answers from session
+        answers = session.get('evisa_answers', {})
+        path = session.get('evisa_path', [e_visa_engine.decision_tree['root']])
+
+        # Store the answer
+        answers[node_id] = answer
+        session['evisa_answers'] = answers
+
+        # Get next node
+        next_node = e_visa_engine.get_next_node(node_id, answer)
+
+        if next_node:
+            path.append(next_node)
+            session['evisa_path'] = path
+            session['evisa_current_node'] = next_node
+
+            # Get the next question or result
+            next_data = e_visa_engine.get_current_question(next_node, answers)
+
+            return jsonify({
+                'success': True,
+                'next_node': next_node,
+                'data': next_data,
+                'progress': {
+                    'answered': len(answers),
+                    'path': path
+                }
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'error': 'No next node found'
+            }), 400
+
+    except Exception as e:
+        import traceback
+        print(f"[ERROR] in submit_evisa_answer: {str(e)}")
+        print(traceback.format_exc())
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/evisa/reset', methods=['POST'])
+def reset_evisa():
+    """Reset E-visa assessment"""
+    session.pop('evisa_current_node', None)
+    session.pop('evisa_answers', None)
+    session.pop('evisa_path', None)
     return jsonify({'success': True})
 
 if __name__ == '__main__':

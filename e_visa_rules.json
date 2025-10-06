@@ -1,0 +1,185 @@
+{
+  "visa_type": {
+    "name": "Eビザ（条約貿易商・投資家）",
+    "description": "日米間の貿易または投資に従事する企業の経営者・管理者向けビザ",
+    "requirements": "国籍要件、会社要件、申請者要件の3つを満たす必要があります"
+  },
+  "decision_tree": {
+    "root": "nationality_check",
+    "nodes": {
+      "nationality_check": {
+        "question": "申請者と会社の国籍が同じですか？（日本国籍の申請者が日本企業から派遣される場合）",
+        "type": "boolean",
+        "yes": "company_type",
+        "no": "result_nationality_fail"
+      },
+      "company_type": {
+        "question": "会社の米国での事業形態は？",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "value": "trader",
+            "text": "貿易商（日米間で商品・サービスの取引）",
+            "next": "trader_volume"
+          },
+          {
+            "value": "investor",
+            "text": "投資家（米国に30万ドル以上投資済み・予定）",
+            "next": "investor_amount"
+          },
+          {
+            "value": "both",
+            "text": "貿易と投資の両方",
+            "next": "trader_volume"
+          }
+        ]
+      },
+      "trader_volume": {
+        "question": "会社の貿易取引の50%以上が日米間で行われていますか？",
+        "type": "boolean",
+        "yes": "trader_substantiality",
+        "no": "result_trader_volume_fail"
+      },
+      "trader_substantiality": {
+        "question": "日米間の貿易取引は継続的で相当な規模（substantial）ですか？\n※多数の取引、または大規模な取引が継続的に行われている",
+        "type": "boolean",
+        "yes": "applicant_role",
+        "no": "result_trader_substantiality_fail"
+      },
+      "investor_amount": {
+        "question": "米国事業への投資額は30万ドル以上ですか？\n※減価償却前の設備・建物が財務諸表に計上されている",
+        "type": "boolean",
+        "yes": "applicant_role",
+        "no": "result_investor_amount_fail"
+      },
+      "applicant_role": {
+        "question": "申請者の役職は？",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "value": "executive",
+            "text": "経営幹部（CEO、COO等のオフィサー）",
+            "next": "executive_experience"
+          },
+          {
+            "value": "manager",
+            "text": "マネージャー（部門管理職、重要な意思決定権限あり）",
+            "next": "manager_experience"
+          },
+          {
+            "value": "specialist",
+            "text": "専門職（特殊スキルを持つスタッフ）",
+            "next": "specialist_skills"
+          },
+          {
+            "value": "other",
+            "text": "その他",
+            "next": "result_role_fail"
+          }
+        ]
+      },
+      "executive_experience": {
+        "question": "米国での役職に深く関連する業務経験が2年以上ありますか？",
+        "type": "boolean",
+        "yes": "result_e_visa_approved",
+        "no": "result_experience_fail"
+      },
+      "manager_experience": {
+        "question": "以下のいずれかを満たしますか？",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "value": "manager_exp",
+            "text": "2年以上のマネージャー経験がある",
+            "next": "result_e_visa_approved"
+          },
+          {
+            "value": "related_exp",
+            "text": "米国での業務に深く関連する2年以上の経験がある",
+            "next": "result_e_visa_approved"
+          },
+          {
+            "value": "neither",
+            "text": "どちらも満たさない",
+            "next": "result_experience_fail"
+          }
+        ]
+      },
+      "specialist_skills": {
+        "question": "以下のいずれかを満たしますか？",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "value": "masters_tech",
+            "text": "理系の大学院卒で、米国での技術系業務に深く関連する3年以上の経験がある",
+            "next": "result_e_visa_approved"
+          },
+          {
+            "value": "special_skills",
+            "text": "米国事業に不可欠な特殊な技能・知識がある",
+            "next": "result_e_visa_approved"
+          },
+          {
+            "value": "neither",
+            "text": "どちらも満たさない",
+            "next": "result_role_fail"
+          }
+        ]
+      },
+      "result_e_visa_approved": {
+        "type": "result",
+        "decision": "approved",
+        "title": "Eビザ申請が可能です",
+        "message": "あなたの状況はEビザの要件を満たしています。",
+        "next_steps": [
+          "DS-160フォームの作成",
+          "面接予約",
+          "必要書類の準備（会社の財務諸表、貿易取引記録、組織図等）",
+          "大使館・領事館での面接"
+        ]
+      },
+      "result_nationality_fail": {
+        "type": "result",
+        "decision": "denied",
+        "title": "国籍要件を満たしていません",
+        "message": "Eビザは申請者と会社が条約国の国籍を持つ必要があります。日本国籍の方が日本企業から派遣される場合のみ申請可能です。",
+        "alternatives": ["Lビザ（企業内転勤）", "H-1Bビザ（専門職）"]
+      },
+      "result_trader_volume_fail": {
+        "type": "result",
+        "decision": "denied",
+        "title": "貿易量要件を満たしていません",
+        "message": "E-1ビザ（貿易商）は、貿易取引の50%以上が日米間で行われている必要があります。",
+        "alternatives": ["E-2ビザ（投資家）として申請を検討", "Lビザ（企業内転勤）"]
+      },
+      "result_trader_substantiality_fail": {
+        "type": "result",
+        "decision": "denied",
+        "title": "貿易の実質性要件を満たしていません",
+        "message": "E-1ビザは継続的で相当な規模の貿易取引が必要です。",
+        "alternatives": ["E-2ビザ（投資家）として申請を検討", "Bビザ（短期商用）"]
+      },
+      "result_investor_amount_fail": {
+        "type": "result",
+        "decision": "denied",
+        "title": "投資額要件を満たしていません",
+        "message": "E-2ビザは通常30万ドル以上の相当な投資が必要です。",
+        "alternatives": ["投資額を増やしてから再申請", "E-1ビザ（貿易商）として申請を検討", "Lビザ（企業内転勤）"]
+      },
+      "result_experience_fail": {
+        "type": "result",
+        "decision": "denied",
+        "title": "経験要件を満たしていません",
+        "message": "Eビザの経営幹部・マネージャーには関連する業務経験が2年以上必要です。",
+        "alternatives": ["経験を積んでから再申請", "Bビザ（短期商用）で短期派遣"]
+      },
+      "result_role_fail": {
+        "type": "result",
+        "decision": "denied",
+        "title": "役職要件を満たしていません",
+        "message": "Eビザは経営幹部、マネージャー、または不可欠な専門職のみが対象です。一般従業員は申請できません。",
+        "alternatives": ["Lビザ（企業内転勤）", "H-1Bビザ（専門職）", "Bビザ（短期商用）"]
+      }
+    }
+  }
+}

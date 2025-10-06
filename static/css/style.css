@@ -560,6 +560,43 @@ body {
     100% { transform: rotate(360deg); }
 }
 
+/* Result Card */
+.result-card {
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 50px 40px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.result-header {
+    margin-bottom: 30px;
+}
+
+.result-section {
+    text-align: left;
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 4px;
+}
+
+.result-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.result-section ul,
+.result-section ol {
+    margin-top: 15px;
+    color: #475569;
+}
+
+.result-section li {
+    margin-bottom: 10px;
+}
+
 /* Footer */
 .footer {
     margin-top: 60px;
