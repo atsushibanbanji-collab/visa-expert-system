@@ -1,0 +1,286 @@
+{
+  "visa_type": "E-visa",
+  "questions": [
+    {
+      "id": "e_q1_1",
+      "text": "申請者と会社の国籍が同じです",
+      "type": "boolean",
+      "row": 1,
+      "group": 1
+    },
+    {
+      "id": "e_q1_2",
+      "text": "会社がEビザの条件を満たします",
+      "type": "boolean",
+      "row": 1,
+      "group": 1
+    },
+    {
+      "id": "e_q1_3",
+      "text": "申請者がEビザの条件を満たします",
+      "type": "boolean",
+      "row": 1,
+      "group": 1
+    },
+    {
+      "id": "e_q1_4",
+      "text": "Eビザでの申請ができます",
+      "type": "boolean",
+      "row": 1,
+      "group": 1
+    },
+    {
+      "id": "e_q2_1",
+      "text": "会社がEビザの投資の条件を満たします",
+      "type": "boolean",
+      "row": 2,
+      "group": 2
+    },
+    {
+      "id": "e_q2_2",
+      "text": "会社がEビザの貿易の条件を満たします",
+      "type": "boolean",
+      "row": 2,
+      "group": 2
+    },
+    {
+      "id": "e_q2_3",
+      "text": "会社がEビザの条件を満たします",
+      "type": "boolean",
+      "row": 2,
+      "group": 2
+    },
+    {
+      "id": "e_q3_1",
+      "text": "減価償却前の設備や建物が30万ドル以上財務諸表の資産に計上されています",
+      "type": "boolean",
+      "row": 3,
+      "group": 3
+    },
+    {
+      "id": "e_q3_2",
+      "text": "30万ドル以上で企業を買収した会社か、買収された会社です",
+      "type": "boolean",
+      "row": 3,
+      "group": 3
+    },
+    {
+      "id": "e_q3_3",
+      "text": "まだ十分な売り上げがなく、これまでに人件費などのランニングコストを含め、30万ドル以上支出しています",
+      "type": "boolean",
+      "row": 3,
+      "group": 3
+    },
+    {
+      "id": "e_q3_4",
+      "text": "会社設立のために、30万ドル以上支出しました（不動産を除く）",
+      "type": "boolean",
+      "row": 3,
+      "group": 3
+    },
+    {
+      "id": "e_q3_5",
+      "text": "会社がEビザの投資の条件を満たします",
+      "type": "boolean",
+      "row": 3,
+      "group": 3
+    },
+    {
+      "id": "e_q4_1",
+      "text": "会社の行う貿易の50％が日米間です",
+      "type": "boolean",
+      "row": 4,
+      "group": 4
+    },
+    {
+      "id": "e_q4_2",
+      "text": "会社の行う貿易は継続的です",
+      "type": "boolean",
+      "row": 4,
+      "group": 4
+    },
+    {
+      "id": "e_q4_3",
+      "text": "貿易による利益が会社の経費の80％以上をカバーしています",
+      "type": "boolean",
+      "row": 4,
+      "group": 4
+    },
+    {
+      "id": "e_q4_4",
+      "text": "会社がEビザの貿易の条件を満たします",
+      "type": "boolean",
+      "row": 4,
+      "group": 4
+    },
+    {
+      "id": "e_q5_1",
+      "text": "申請者がEビザのマネージャー以上の条件を満たします",
+      "type": "boolean",
+      "row": 5,
+      "group": 5
+    },
+    {
+      "id": "e_q5_2",
+      "text": "申請者がEビザのスタッフの条件を満たします",
+      "type": "boolean",
+      "row": 5,
+      "group": 5
+    },
+    {
+      "id": "e_q5_3",
+      "text": "EビザTDY(short-term needs)の条件を満たします",
+      "type": "boolean",
+      "row": 5,
+      "group": 5
+    },
+    {
+      "id": "e_q5_4",
+      "text": "申請者がEビザの条件を満たします",
+      "type": "boolean",
+      "row": 5,
+      "group": 5
+    },
+    {
+      "id": "e_q6_1",
+      "text": "米国拠点でEビザでマネージャー以上として認められるポジションに就きます",
+      "type": "boolean",
+      "row": 6,
+      "group": 6
+    },
+    {
+      "id": "e_q6_2",
+      "text": "マネージャー以上のポジションの業務を遂行する十分な能力があります",
+      "type": "boolean",
+      "row": 6,
+      "group": 6
+    },
+    {
+      "id": "e_q6_3",
+      "text": "申請者がEビザのマネージャー以上の条件を満たします",
+      "type": "boolean",
+      "row": 6,
+      "group": 6
+    },
+    {
+      "id": "e_q7_1",
+      "text": "CEOなどのオフィサーのポジションに就きます",
+      "type": "boolean",
+      "row": 7,
+      "group": 7
+    },
+    {
+      "id": "e_q7_2",
+      "text": "経営企画のマネージャーなど、米国拠点の経営に関わるポジションに就きます",
+      "type": "boolean",
+      "row": 7,
+      "group": 7
+    },
+    {
+      "id": "e_q7_3",
+      "text": "評価・雇用に責任を持つ複数のフルタイムのスタッフを部下に持つマネージャー以上のポジションに就きます",
+      "type": "boolean",
+      "row": 7,
+      "group": 7
+    },
+    {
+      "id": "e_q7_4",
+      "text": "米国拠点でEビザでマネージャー以上として認められるポジションに就きます",
+      "type": "boolean",
+      "row": 7,
+      "group": 7
+    },
+    {
+      "id": "e_q8_1",
+      "text": "米国拠点のポジションの業務に深く関連する業務の経験が2年以上あります",
+      "type": "boolean",
+      "row": 8,
+      "group": 8
+    },
+    {
+      "id": "e_q8_2",
+      "text": "マネジメント経験が2年以上あります",
+      "type": "boolean",
+      "row": 8,
+      "group": 8
+    },
+    {
+      "id": "e_q8_3",
+      "text": "マネージャー以上のポジションの業務を遂行する十分な能力があります",
+      "type": "boolean",
+      "row": 8,
+      "group": 8
+    },
+    {
+      "id": "e_q9_1",
+      "text": "2年以上のマネージャー経験があります",
+      "type": "boolean",
+      "row": 9,
+      "group": 9
+    },
+    {
+      "id": "e_q9_2",
+      "text": "マネジメントが求められるプロジェクトマネージャーなどの2年以上の経験があります",
+      "type": "boolean",
+      "row": 9,
+      "group": 9
+    },
+    {
+      "id": "e_q9_3",
+      "text": "マネジメント経験が2年以上あります",
+      "type": "boolean",
+      "row": 9,
+      "group": 9
+    },
+    {
+      "id": "e_q10_1",
+      "text": "理系の大学院卒で、米国拠点の技術系の業務に深く関連する3年以上の業務経験があります",
+      "type": "boolean",
+      "row": 10,
+      "group": 10
+    },
+    {
+      "id": "e_q10_2",
+      "text": "理系の学部卒で、米国拠点の技術系の業務に深く関連する4年以上の業務経験があります",
+      "type": "boolean",
+      "row": 10,
+      "group": 10
+    },
+    {
+      "id": "e_q10_3",
+      "text": "米国拠点の業務に深く関連する5年以上の業務経験があります",
+      "type": "boolean",
+      "row": 10,
+      "group": 10
+    },
+    {
+      "id": "e_q10_4",
+      "text": "申請者がEビザのスタッフの条件を満たします",
+      "type": "boolean",
+      "row": 10,
+      "group": 10
+    },
+    {
+      "id": "e_q11_1",
+      "text": "2年以内の期間で、目的を限定した派遣理由を説明できます",
+      "type": "boolean",
+      "row": 11,
+      "group": 11
+    },
+    {
+      "id": "e_q11_2",
+      "text": "米国拠点の業務に深く関連する2年以上の業務経験があります",
+      "type": "boolean",
+      "row": 11,
+      "group": 11
+    },
+    {
+      "id": "e_q11_3",
+      "text": "EビザTDY(short-term needs)の条件を満たします",
+      "type": "boolean",
+      "row": 11,
+      "group": 11
+    }
+  ],
+  "total_questions": 40
+}
