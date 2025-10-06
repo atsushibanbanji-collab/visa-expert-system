@@ -43,14 +43,45 @@
       "trader_substantiality": {
         "question": "日本と米国の間での取引は定期的に続いていますか？\n（毎月のように取引がある、または大きな取引が定期的にある）",
         "type": "boolean",
+        "yes": "trader_profit",
+        "no": "result_trader_substantiality_fail"
+      },
+      "trader_profit": {
+        "question": "貿易による利益は会社の運営費用（人件費など）の80%以上をカバーしていますか？",
+        "type": "boolean",
         "yes": "applicant_role",
         "no": "result_trader_substantiality_fail"
       },
       "investor_amount": {
-        "question": "米国の事業に約3000万円以上を投資していますか？\n（土地・建物・設備・運営費用などの合計）",
-        "type": "boolean",
-        "yes": "applicant_role",
-        "no": "result_investor_amount_fail"
+        "question": "米国の事業への投資方法はどれに当てはまりますか？",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "value": "assets",
+            "text": "約3000万円以上の設備や建物を購入した（財務諸表に記載されている）",
+            "next": "applicant_role"
+          },
+          {
+            "value": "acquisition",
+            "text": "約3000万円以上で米国の会社を買収した、または買収された",
+            "next": "applicant_role"
+          },
+          {
+            "value": "startup_costs",
+            "text": "まだ売上は少ないが、人件費や運営費用で約3000万円以上使った",
+            "next": "applicant_role"
+          },
+          {
+            "value": "setup_costs",
+            "text": "会社設立のために約3000万円以上使った（不動産以外）",
+            "next": "applicant_role"
+          },
+          {
+            "value": "none",
+            "text": "どれも当てはまらない",
+            "next": "result_investor_amount_fail"
+          }
+        ]
       },
       "applicant_role": {
         "question": "あなたの役職はどれに当てはまりますか？",
@@ -59,12 +90,12 @@
           {
             "value": "executive",
             "text": "経営者・役員（社長、副社長、取締役など）",
-            "next": "executive_experience"
+            "next": "executive_position_detail"
           },
           {
             "value": "manager",
             "text": "管理職（部門長、課長など、部下の採用や評価を行う）",
-            "next": "manager_experience"
+            "next": "manager_position_detail"
           },
           {
             "value": "specialist",
@@ -78,53 +109,122 @@
           }
         ]
       },
+      "executive_position_detail": {
+        "question": "米国でのあなたのポジションはどれに当てはまりますか？",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "value": "ceo",
+            "text": "社長やCEOなどのトップの役職",
+            "next": "executive_experience"
+          },
+          {
+            "value": "strategic",
+            "text": "経営企画など、会社の経営に関わる役職",
+            "next": "executive_experience"
+          },
+          {
+            "value": "department_head",
+            "text": "部門長など、複数の社員を管理する役職",
+            "next": "executive_experience"
+          },
+          {
+            "value": "none",
+            "text": "どれも当てはまらない",
+            "next": "result_role_fail"
+          }
+        ]
+      },
       "executive_experience": {
         "question": "米国で行う仕事と同じような業務の経験が2年以上ありますか？",
         "type": "boolean",
         "yes": "result_e_visa_approved",
         "no": "result_experience_fail"
       },
+      "manager_position_detail": {
+        "question": "米国でのあなたのポジションはどれに当てはまりますか？",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "value": "has_subordinates",
+            "text": "複数の正社員の部下がいて、採用や評価の責任がある",
+            "next": "manager_experience"
+          },
+          {
+            "value": "strategic_role",
+            "text": "会社の重要な判断や経営に関わる",
+            "next": "manager_experience"
+          },
+          {
+            "value": "none",
+            "text": "どれも当てはまらない",
+            "next": "result_role_fail"
+          }
+        ]
+      },
       "manager_experience": {
-        "question": "以下のいずれかに当てはまりますか？",
+        "question": "米国で行う仕事に関連する経験はありますか？",
+        "type": "boolean",
+        "yes": "manager_experience_detail",
+        "no": "result_experience_fail"
+      },
+      "manager_experience_detail": {
+        "question": "どのような経験がありますか？",
         "type": "multiple_choice",
         "options": [
           {
             "value": "manager_exp",
-            "text": "管理職として2年以上働いた経験がある",
+            "text": "管理職（マネージャー）として2年以上働いた",
+            "next": "result_e_visa_approved"
+          },
+          {
+            "value": "project_manager",
+            "text": "プロジェクトマネージャーなど、マネジメントが必要な仕事を2年以上した",
             "next": "result_e_visa_approved"
           },
           {
             "value": "related_exp",
-            "text": "米国で行う仕事と同じような業務の経験が2年以上ある",
+            "text": "米国で行う仕事と同じような業務を2年以上した",
             "next": "result_e_visa_approved"
           },
           {
-            "value": "neither",
-            "text": "どちらも当てはまらない",
+            "value": "none",
+            "text": "2年未満の経験しかない",
             "next": "result_experience_fail"
           }
         ]
       },
       "specialist_skills": {
-        "question": "以下のいずれかに当てはまりますか？",
+        "question": "あなたの学歴と経験を教えてください",
         "type": "multiple_choice",
         "options": [
           {
             "value": "masters_tech",
             "text": "理系の大学院を卒業していて、技術系の仕事の経験が3年以上ある",
-            "next": "result_e_visa_approved"
+            "next": "specialist_essential"
           },
           {
-            "value": "special_skills",
-            "text": "米国の事業に必要な特別な技術や知識を持っている",
-            "next": "result_e_visa_approved"
+            "value": "bachelor_tech",
+            "text": "理系の大学を卒業していて、技術系の仕事の経験が4年以上ある",
+            "next": "specialist_essential"
           },
           {
-            "value": "neither",
-            "text": "どちらも当てはまらない",
+            "value": "experience_only",
+            "text": "米国で行う仕事と同じような業務の経験が5年以上ある",
+            "next": "specialist_essential"
+          },
+          {
+            "value": "none",
+            "text": "どれも当てはまらない",
             "next": "result_role_fail"
           }
         ]
+      },
+      "specialist_essential": {
+        "question": "あなたの技術や知識は米国の事業にとって必要不可欠ですか？\n（あなたがいないと事業が成り立たない、または代わりの人を見つけるのが難しい）",
+        "type": "boolean",
+        "yes": "result_e_visa_approved",
+        "no": "result_role_fail"
       },
       "result_e_visa_approved": {
         "type": "result",
