@@ -31,6 +31,36 @@ body {
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     border-top: 4px solid #1e3a8a;
+    position: relative;
+}
+
+.dev-mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    background: #64748b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dev-mode-toggle:hover {
+    background: #475569;
+}
+
+.dev-mode-toggle.active {
+    background: #10b981;
+}
+
+.dev-mode-toggle.active:hover {
+    background: #059669;
 }
 
 .logo {
@@ -640,6 +670,52 @@ body {
 .footer-links a:hover {
     color: #1e40af;
     text-decoration: underline;
+}
+
+/* Developer Mode Panel */
+.dev-panel {
+    background: #1e293b;
+    color: #e2e8f0;
+    margin: 0 -30px 20px -30px;
+    border-bottom: 2px solid #334155;
+}
+
+.dev-panel-header {
+    padding: 12px 30px;
+    background: #0f172a;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dev-panel-content {
+    padding: 20px 30px;
+}
+
+.dev-info-row {
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+    display: flex;
+    gap: 10px;
+}
+
+.dev-info-row strong {
+    color: #10b981;
+    min-width: 100px;
+}
+
+.dev-info-row pre {
+    background: #0f172a;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 0.75rem;
+    margin: 5px 0 0 0;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
 }
 
 /* Responsive Design */

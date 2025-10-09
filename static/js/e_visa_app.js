@@ -3,7 +3,9 @@ let currentState = {
     visaType: null,  // 'E', 'L', or 'B'
     currentNode: null,
     answers: {},
-    isLoading: false
+    isLoading: false,
+    devMode: false,  // Developer mode flag
+    path: []  // Track the path through the decision tree
 };
 
 // DOM Elements
@@ -29,7 +31,57 @@ const resultsContent = document.getElementById('resultsContent');
 // Initialize Application
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Multi-Visa Expert System initialized');
+
+    // Check if dev mode was previously enabled
+    const savedDevMode = localStorage.getItem('devMode');
+    if (savedDevMode === 'true') {
+        currentState.devMode = true;
+        updateDevModeUI();
+    }
 });
+
+// Toggle developer mode
+function toggleDevMode() {
+    currentState.devMode = !currentState.devMode;
+    localStorage.setItem('devMode', currentState.devMode);
+    updateDevModeUI();
+
+    // Update dev panel if in questionnaire
+    if (questionnaireSection.style.display !== 'none') {
+        updateDevPanel();
+    }
+}
+
+// Update developer mode UI
+function updateDevModeUI() {
+    const toggleBtn = document.getElementById('devModeToggle');
+    const devPanel = document.getElementById('devPanel');
+
+    if (currentState.devMode) {
+        toggleBtn.classList.add('active');
+        toggleBtn.innerHTML = '<i class="fas fa-code"></i> 開発者モード ON';
+        if (devPanel) {
+            devPanel.style.display = 'block';
+        }
+    } else {
+        toggleBtn.classList.remove('active');
+        toggleBtn.innerHTML = '<i class="fas fa-code"></i> 開発者モード';
+        if (devPanel) {
+            devPanel.style.display = 'none';
+        }
+    }
+}
+
+// Update developer panel with current state
+function updateDevPanel() {
+    if (!currentState.devMode) return;
+
+    document.getElementById('devVisaType').textContent = currentState.visaType || '-';
+    document.getElementById('devCurrentNode').textContent = currentState.currentNode || '-';
+    document.getElementById('devAnswerCount').textContent = Object.keys(currentState.answers).length;
+    document.getElementById('devPath').textContent = currentState.path.join(' → ') || '-';
+    document.getElementById('devAnswers').textContent = JSON.stringify(currentState.answers, null, 2);
+}
 
 // Select visa type
 function selectVisaType(visaType) {
@@ -50,13 +102,16 @@ async function startQuestionnaire() {
         // Reset session with visa type
         await fetch(`/api/visa/reset?type=${currentState.visaType}`, { method: 'POST' });
 
-        // Reset state (keep visa type)
+        // Reset state (keep visa type and dev mode)
         const visaType = currentState.visaType;
+        const devMode = currentState.devMode;
         currentState = {
             visaType: visaType,
             currentNode: null,
             answers: {},
-            isLoading: false
+            isLoading: false,
+            devMode: devMode,
+            path: []
         };
 
         // Load first question
@@ -90,6 +145,11 @@ async function loadQuestion() {
 
         currentState.currentNode = data.current_node;
 
+        // Update path
+        if (data.progress && data.progress.path) {
+            currentState.path = data.progress.path;
+        }
+
         // Check if it's a result
         if (data.data.type === 'result') {
             showResult(data.data);
@@ -98,6 +158,7 @@ async function loadQuestion() {
         }
 
         updateProgress();
+        updateDevPanel();
 
     } catch (error) {
         console.error('Error loading question:', error);
@@ -190,6 +251,11 @@ async function submitAnswer(answer) {
         currentState.answers[currentState.currentNode] = answer;
         currentState.currentNode = data.next_node;
 
+        // Update path
+        if (data.progress && data.progress.path) {
+            currentState.path = data.progress.path;
+        }
+
         // Show next question or result
         if (data.data.type === 'result') {
             showResult(data.data);
@@ -198,6 +264,7 @@ async function submitAnswer(answer) {
         }
 
         updateProgress();
+        updateDevPanel();
 
     } catch (error) {
         console.error('Error submitting answer:', error);

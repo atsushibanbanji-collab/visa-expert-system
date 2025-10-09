@@ -17,6 +17,9 @@
                     <h1>米国ビザ診断システム</h1>
                 </div>
                 <p class="subtitle">E・L・Bビザの申請資格を診断</p>
+                <button class="dev-mode-toggle" onclick="toggleDevMode()" id="devModeToggle">
+                    <i class="fas fa-code"></i> 開発者モード
+                </button>
             </div>
         </header>
 
@@ -87,6 +90,31 @@
                         </button>
                         <div class="question-counter">
                             質問 <span id="currentQuestionNum">1</span>
+                        </div>
+                    </div>
+
+                    <!-- Developer Mode Panel -->
+                    <div class="dev-panel" id="devPanel" style="display: none;">
+                        <div class="dev-panel-header">
+                            <i class="fas fa-bug"></i> 開発者情報
+                        </div>
+                        <div class="dev-panel-content">
+                            <div class="dev-info-row">
+                                <strong>ビザタイプ:</strong> <span id="devVisaType">-</span>
+                            </div>
+                            <div class="dev-info-row">
+                                <strong>現在のノード:</strong> <span id="devCurrentNode">-</span>
+                            </div>
+                            <div class="dev-info-row">
+                                <strong>回答数:</strong> <span id="devAnswerCount">0</span>
+                            </div>
+                            <div class="dev-info-row">
+                                <strong>経路:</strong> <span id="devPath">-</span>
+                            </div>
+                            <div class="dev-info-row">
+                                <strong>全回答:</strong>
+                                <pre id="devAnswers">{}</pre>
+                            </div>
                         </div>
                     </div>
 
