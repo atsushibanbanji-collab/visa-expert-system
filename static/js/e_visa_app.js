@@ -73,14 +73,37 @@ function updateDevModeUI() {
 }
 
 // Update developer panel with current state
-function updateDevPanel() {
+async function updateDevPanel() {
     if (!currentState.devMode) return;
 
     document.getElementById('devVisaType').textContent = currentState.visaType || '-';
     document.getElementById('devCurrentNode').textContent = currentState.currentNode || '-';
     document.getElementById('devAnswerCount').textContent = Object.keys(currentState.answers).length;
     document.getElementById('devPath').textContent = currentState.path.join(' → ') || '-';
-    document.getElementById('devAnswers').textContent = JSON.stringify(currentState.answers, null, 2);
+
+    // Load knowledge data to get question texts
+    if (currentState.visaType && !knowledgeData[currentState.visaType]) {
+        await loadKnowledgeData(currentState.visaType);
+    }
+
+    // Format answers with question texts
+    let formattedAnswers = {};
+    if (currentState.visaType && knowledgeData[currentState.visaType]) {
+        const nodes = knowledgeData[currentState.visaType].decision_tree.nodes;
+        for (const [nodeId, answer] of Object.entries(currentState.answers)) {
+            const node = nodes[nodeId];
+            const questionText = node ? (node.question || nodeId).split('\n')[0].substring(0, 60) : nodeId;
+            const answerText = answer === true ? 'はい' : answer === false ? 'いいえ' : answer;
+            formattedAnswers[nodeId] = {
+                question: questionText + (questionText.length >= 60 ? '...' : ''),
+                answer: answerText
+            };
+        }
+    } else {
+        formattedAnswers = currentState.answers;
+    }
+
+    document.getElementById('devAnswers').textContent = JSON.stringify(formattedAnswers, null, 2);
 }
 
 // Select visa type
