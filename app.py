@@ -433,6 +433,33 @@ def reset_visa():
     session.pop(f'{visa_type}_path', None)
     return jsonify({'success': True})
 
+@app.route('/api/visa/knowledge')
+def get_visa_knowledge():
+    """Get knowledge database for a specific visa type"""
+    try:
+        visa_type = request.args.get('type', 'E')
+        engine = multi_visa_engine.get_engine(visa_type)
+
+        # Return the full knowledge structure
+        knowledge = {
+            'visa_type': engine.visa_type,
+            'decision_tree': engine.decision_tree
+        }
+
+        return jsonify({
+            'success': True,
+            'knowledge': knowledge
+        })
+
+    except Exception as e:
+        import traceback
+        print(f"[ERROR] in get_visa_knowledge: {str(e)}")
+        print(traceback.format_exc())
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 if __name__ == '__main__':
     import os
     port = int(os.environ.get('PORT', 5000))

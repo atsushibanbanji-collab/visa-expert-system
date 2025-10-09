@@ -351,7 +351,28 @@ function updateProgress() {
 
 // Restart assessment
 async function restartAssessment() {
-    await startQuestionnaire();
+    // Reset session
+    if (currentState.visaType) {
+        await fetch(`/api/visa/reset?type=${currentState.visaType}`, { method: 'POST' });
+    }
+
+    // Reset state completely
+    currentState = {
+        visaType: null,
+        currentNode: null,
+        answers: {},
+        isLoading: false,
+        devMode: currentState.devMode,  // Preserve dev mode
+        path: []
+    };
+
+    // Go back to welcome screen
+    hideAllSections();
+    welcomeSection.style.display = 'block';
+    progressContainer.style.display = 'none';
+
+    // Update dev panel
+    updateDevPanel();
 }
 
 // Utility Functions
@@ -381,4 +402,189 @@ window.addEventListener('error', function(event) {
 window.addEventListener('unhandledrejection', function(event) {
     console.error('Unhandled promise rejection:', event.reason);
     hideLoading();
+});
+
+// Knowledge Database Modal Functions
+let currentKBVisaType = 'E';
+let knowledgeData = {};
+
+async function openKnowledgeDB() {
+    const modal = document.getElementById('knowledgeModal');
+    modal.style.display = 'block';
+
+    // Load current visa type or default to E
+    currentKBVisaType = currentState.visaType || 'E';
+
+    // Load knowledge data if not already loaded
+    if (!knowledgeData[currentKBVisaType]) {
+        await loadKnowledgeData(currentKBVisaType);
+    }
+
+    // Display the data
+    displayKnowledgeData(currentKBVisaType);
+
+    // Set active tab
+    setActiveKBTab(currentKBVisaType);
+}
+
+function closeKnowledgeDB() {
+    const modal = document.getElementById('knowledgeModal');
+    modal.style.display = 'none';
+}
+
+async function switchKBTab(visaType) {
+    currentKBVisaType = visaType;
+
+    // Load data if not already loaded
+    if (!knowledgeData[visaType]) {
+        await loadKnowledgeData(visaType);
+    }
+
+    // Display the data
+    displayKnowledgeData(visaType);
+
+    // Update active tab
+    setActiveKBTab(visaType);
+}
+
+function setActiveKBTab(visaType) {
+    const tabs = document.querySelectorAll('.kb-tab');
+    tabs.forEach(tab => {
+        if (tab.textContent.includes(visaType + 'ビザ')) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+}
+
+async function loadKnowledgeData(visaType) {
+    try {
+        const response = await fetch(`/api/visa/knowledge?type=${visaType}`);
+        const data = await response.json();
+
+        if (data.success) {
+            knowledgeData[visaType] = data.knowledge;
+        } else {
+            console.error('Failed to load knowledge data:', data.error);
+            alert('知識データの読み込みに失敗しました');
+        }
+    } catch (error) {
+        console.error('Error loading knowledge data:', error);
+        alert('知識データの読み込み中にエラーが発生しました');
+    }
+}
+
+function displayKnowledgeData(visaType) {
+    const knowledge = knowledgeData[visaType];
+    if (!knowledge) return;
+
+    // Display visa info
+    const visaInfoDiv = document.getElementById('kbVisaInfo');
+    visaInfoDiv.innerHTML = `
+        <div class="kb-visa-info">
+            <h4>${knowledge.visa_type.name}</h4>
+            <p>${knowledge.visa_type.description}</p>
+        </div>
+    `;
+
+    // Display nodes
+    const nodesDiv = document.getElementById('kbNodes');
+    nodesDiv.innerHTML = '';
+
+    const nodes = knowledge.decision_tree.nodes;
+    const rootNode = knowledge.decision_tree.root;
+
+    // Add root indicator
+    Object.keys(nodes).forEach(nodeId => {
+        const node = nodes[nodeId];
+        const nodeElement = createKBNodeElement(nodeId, node, nodeId === rootNode);
+        nodesDiv.appendChild(nodeElement);
+    });
+}
+
+function createKBNodeElement(nodeId, node, isRoot) {
+    const div = document.createElement('div');
+    div.className = 'kb-node';
+    div.setAttribute('data-node-id', nodeId);
+    div.setAttribute('data-question', node.question || node.title || '');
+
+    const isResult = node.type === 'result';
+    const typeLabel = isResult ? 'result' : (node.type || 'question');
+
+    let html = `
+        <div class="kb-node-header">
+            <span class="kb-node-id">${nodeId}${isRoot ? ' (ROOT)' : ''}</span>
+            <span class="kb-node-type ${typeLabel}">${typeLabel}</span>
+        </div>
+        <div class="kb-node-question">${node.question || node.title || node.message || ''}</div>
+    `;
+
+    // Add options if it's a question
+    if (!isResult) {
+        html += '<div class="kb-node-options">';
+
+        if (node.type === 'boolean') {
+            html += `
+                <div class="kb-node-option">
+                    <i class="fas fa-check"></i>
+                    <span>はい</span>
+                    <span class="kb-node-next">→ ${node.yes}</span>
+                </div>
+                <div class="kb-node-option">
+                    <i class="fas fa-times"></i>
+                    <span>いいえ</span>
+                    <span class="kb-node-next">→ ${node.no}</span>
+                </div>
+            `;
+        } else if (node.type === 'multiple_choice' && node.options) {
+            node.options.forEach(option => {
+                html += `
+                    <div class="kb-node-option">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>${option.text}</span>
+                        <span class="kb-node-next">→ ${option.next}</span>
+                    </div>
+                `;
+            });
+        }
+
+        html += '</div>';
+    } else {
+        // Display result details
+        if (node.decision) {
+            const decisionColor = node.decision === 'approved' ? '#10b981' : '#ef4444';
+            html += `<div style="margin-top: 12px; padding: 8px 12px; background: ${decisionColor}; color: white; border-radius: 4px; font-weight: 600;">
+                判定: ${node.decision === 'approved' ? '承認' : '不承認'}
+            </div>`;
+        }
+    }
+
+    div.innerHTML = html;
+    return div;
+}
+
+function filterKBNodes() {
+    const searchInput = document.getElementById('kbSearch');
+    const searchTerm = searchInput.value.toLowerCase();
+    const nodes = document.querySelectorAll('.kb-node');
+
+    nodes.forEach(node => {
+        const nodeId = node.getAttribute('data-node-id').toLowerCase();
+        const question = node.getAttribute('data-question').toLowerCase();
+
+        if (nodeId.includes(searchTerm) || question.includes(searchTerm)) {
+            node.style.display = 'block';
+        } else {
+            node.style.display = 'none';
+        }
+    });
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('knowledgeModal');
+    if (event.target === modal) {
+        closeKnowledgeDB();
+    }
 });
