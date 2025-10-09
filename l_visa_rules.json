@@ -10,168 +10,122 @@
       "transfer_check": {
         "question": "アメリカ以外の国から、同じグループ会社の米国拠点へ異動しますか？",
         "type": "boolean",
-        "yes": "l_visa_type",
+        "yes": "is_blanket",
         "no": "result_not_intracompany_transfer"
       },
-      "l_visa_type": {
-        "question": "どのタイプのLビザを希望しますか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "blanket",
-            "text": "Blanket Lビザ（会社がBlanket登録済みまたは予定）",
-            "next": "blanket_company_check"
-          },
-          {
-            "value": "individual",
-            "text": "Individual Lビザ（個別申請）",
-            "next": "individual_experience"
-          }
-        ]
+      "is_blanket": {
+        "question": "会社はBlanket Lビザの登録を済ませていますか（または登録予定ですか）？",
+        "type": "boolean",
+        "yes": "blanket_has_revenue",
+        "no": "individual_experience"
       },
-      "blanket_company_check": {
-        "question": "会社は以下のいずれかの条件を満たしていますか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "revenue",
-            "text": "米国子会社の売上合計が2500万ドル（約35億円）以上",
-            "next": "blanket_experience"
-          },
-          {
-            "value": "employees",
-            "text": "米国子会社で1,000人以上を現地採用している",
-            "next": "blanket_experience"
-          },
-          {
-            "value": "petitions",
-            "text": "1年間に10人以上のLビザ申請をしている",
-            "next": "blanket_experience"
-          },
-          {
-            "value": "none",
-            "text": "どれも当てはまらない",
-            "next": "result_blanket_company_fail"
-          }
-        ]
+      "blanket_has_revenue": {
+        "question": "米国子会社の売上合計が2500万ドル（約35億円）以上ありますか？",
+        "type": "boolean",
+        "yes": "blanket_experience",
+        "no": "blanket_has_employees"
+      },
+      "blanket_has_employees": {
+        "question": "米国子会社で1,000人以上を現地採用していますか？",
+        "type": "boolean",
+        "yes": "blanket_experience",
+        "no": "blanket_has_petitions"
+      },
+      "blanket_has_petitions": {
+        "question": "1年間に10人以上のLビザ申請をしていますか？",
+        "type": "boolean",
+        "yes": "blanket_experience",
+        "no": "result_blanket_company_fail"
       },
       "blanket_experience": {
         "question": "直近3年間のうち、1年以上アメリカ以外のグループ会社に所属していましたか？",
         "type": "boolean",
-        "yes": "blanket_role",
+        "yes": "blanket_is_manager",
         "no": "result_experience_fail"
       },
-      "blanket_role": {
-        "question": "米国での役職はどれに当てはまりますか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "manager",
-            "text": "管理職（マネージャー）",
-            "next": "blanket_manager_check"
-          },
-          {
-            "value": "specialist",
-            "text": "専門職（特別な知識を持つスタッフ）",
-            "next": "blanket_specialist_check"
-          },
-          {
-            "value": "other",
-            "text": "一般社員",
-            "next": "result_role_fail"
-          }
-        ]
+      "blanket_is_manager": {
+        "question": "米国での役職は管理職（マネージャー）ですか？",
+        "type": "boolean",
+        "yes": "blanket_manager_has_experience",
+        "no": "blanket_is_specialist"
       },
-      "blanket_manager_check": {
-        "question": "以下の両方に当てはまりますか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "yes",
-            "text": "管理職としての経験があり、米国での業務も管理職として認められる",
-            "next": "result_blanket_l_approved"
-          },
-          {
-            "value": "no",
-            "text": "どちらかまたは両方に当てはまらない",
-            "next": "result_manager_qualification_fail"
-          }
-        ]
+      "blanket_manager_has_experience": {
+        "question": "管理職としての経験がありますか？",
+        "type": "boolean",
+        "yes": "blanket_manager_us_qualified",
+        "no": "result_manager_qualification_fail"
       },
-      "blanket_specialist_check": {
-        "question": "以下の両方に当てはまりますか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "yes",
-            "text": "特別な専門知識（specialized knowledge）があり、米国での業務にもそれが必要",
-            "next": "result_blanket_l_approved"
-          },
-          {
-            "value": "no",
-            "text": "どちらかまたは両方に当てはまらない",
-            "next": "result_specialist_knowledge_fail"
-          }
-        ]
+      "blanket_manager_us_qualified": {
+        "question": "米国での業務も管理職として認められますか？",
+        "type": "boolean",
+        "yes": "result_blanket_l_approved",
+        "no": "result_manager_qualification_fail"
+      },
+      "blanket_is_specialist": {
+        "question": "米国での役職は専門職（特別な知識を持つスタッフ）ですか？",
+        "type": "boolean",
+        "yes": "blanket_specialist_has_knowledge",
+        "no": "result_role_fail"
+      },
+      "blanket_specialist_has_knowledge": {
+        "question": "特別な専門知識（specialized knowledge）がありますか？",
+        "type": "boolean",
+        "yes": "blanket_specialist_us_needs",
+        "no": "result_specialist_knowledge_fail"
+      },
+      "blanket_specialist_us_needs": {
+        "question": "米国での業務にもその専門知識が必要ですか？",
+        "type": "boolean",
+        "yes": "result_blanket_l_approved",
+        "no": "result_specialist_knowledge_fail"
       },
       "individual_experience": {
         "question": "直近3年間のうち、1年以上アメリカ以外のグループ会社に所属していましたか？",
         "type": "boolean",
-        "yes": "individual_role",
+        "yes": "individual_is_manager",
         "no": "result_experience_fail"
       },
-      "individual_role": {
-        "question": "米国での役職はどれに当てはまりますか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "manager",
-            "text": "管理職（マネージャー）",
-            "next": "individual_manager_check"
-          },
-          {
-            "value": "specialist",
-            "text": "専門職（特別な知識を持つスタッフ）",
-            "next": "individual_specialist_check"
-          },
-          {
-            "value": "other",
-            "text": "一般社員",
-            "next": "result_role_fail"
-          }
-        ]
+      "individual_is_manager": {
+        "question": "米国での役職は管理職（マネージャー）ですか？",
+        "type": "boolean",
+        "yes": "individual_manager_has_experience",
+        "no": "individual_is_specialist"
       },
-      "individual_manager_check": {
-        "question": "以下のすべてに当てはまりますか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "yes",
-            "text": "管理職経験があり、米国でも管理職として認められ、大卒の正社員の部下が2名以上いる",
-            "next": "result_individual_l_approved"
-          },
-          {
-            "value": "no",
-            "text": "いずれか1つ以上に当てはまらない",
-            "next": "result_manager_qualification_fail"
-          }
-        ]
+      "individual_manager_has_experience": {
+        "question": "管理職としての経験がありますか？",
+        "type": "boolean",
+        "yes": "individual_manager_us_qualified",
+        "no": "result_manager_qualification_fail"
       },
-      "individual_specialist_check": {
-        "question": "以下の両方に当てはまりますか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "yes",
-            "text": "特別な専門知識（specialized knowledge）があり、米国での業務にもそれが必要",
-            "next": "result_individual_l_approved"
-          },
-          {
-            "value": "no",
-            "text": "どちらかまたは両方に当てはまらない",
-            "next": "result_specialist_knowledge_fail"
-          }
-        ]
+      "individual_manager_us_qualified": {
+        "question": "米国でも管理職として認められますか？",
+        "type": "boolean",
+        "yes": "individual_manager_has_subordinates",
+        "no": "result_manager_qualification_fail"
+      },
+      "individual_manager_has_subordinates": {
+        "question": "米国で大卒の正社員の部下が2名以上いますか？",
+        "type": "boolean",
+        "yes": "result_individual_l_approved",
+        "no": "result_manager_qualification_fail"
+      },
+      "individual_is_specialist": {
+        "question": "米国での役職は専門職（特別な知識を持つスタッフ）ですか？",
+        "type": "boolean",
+        "yes": "individual_specialist_has_knowledge",
+        "no": "result_role_fail"
+      },
+      "individual_specialist_has_knowledge": {
+        "question": "特別な専門知識（specialized knowledge）がありますか？",
+        "type": "boolean",
+        "yes": "individual_specialist_us_needs",
+        "no": "result_specialist_knowledge_fail"
+      },
+      "individual_specialist_us_needs": {
+        "question": "米国での業務にもその専門知識が必要ですか？",
+        "type": "boolean",
+        "yes": "result_individual_l_approved",
+        "no": "result_specialist_knowledge_fail"
       },
       "result_blanket_l_approved": {
         "type": "result",

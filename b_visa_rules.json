@@ -5,65 +5,37 @@
     "requirements": "商用活動の範囲、滞在期間、ESTA要件を確認します"
   },
   "decision_tree": {
-    "root": "purpose_check",
+    "root": "is_tourism",
     "nodes": {
-      "purpose_check": {
-        "question": "米国での活動目的は何ですか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "business",
-            "text": "商用（会議、商談、視察など）",
-            "next": "business_activity"
-          },
-          {
-            "value": "equipment_service",
-            "text": "販売した装置や設備のメンテナンス・設置作業",
-            "next": "equipment_check"
-          },
-          {
-            "value": "specialized_work",
-            "text": "専門性の高い作業（H-1Bレベル）",
-            "next": "specialized_work_check"
-          },
-          {
-            "value": "training",
-            "text": "研修",
-            "next": "training_check"
-          },
-          {
-            "value": "tourism",
-            "text": "観光",
-            "next": "result_tourism_b2"
-          }
-        ]
+      "is_tourism": {
+        "question": "米国での活動目的は観光ですか？",
+        "type": "boolean",
+        "yes": "result_tourism_b2",
+        "no": "is_business"
+      },
+      "is_business": {
+        "question": "商用目的ですか？\n（会議、商談、視察など）",
+        "type": "boolean",
+        "yes": "business_activity",
+        "no": "is_equipment_service"
       },
       "business_activity": {
         "question": "米国での活動は商用の範囲内ですか？\n（報酬を受けない会議・商談・視察・展示会参加など）",
         "type": "boolean",
-        "yes": "stay_duration",
+        "yes": "stay_under_90",
         "no": "result_not_business_scope"
       },
-      "stay_duration": {
-        "question": "1回の滞在期間はどのくらいですか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "under_90",
-            "text": "90日以内",
-            "next": "esta_eligibility"
-          },
-          {
-            "value": "90_to_180",
-            "text": "90日超～6ヶ月以内",
-            "next": "result_b1_visa_required"
-          },
-          {
-            "value": "over_180",
-            "text": "6ヶ月超",
-            "next": "result_stay_too_long"
-          }
-        ]
+      "stay_under_90": {
+        "question": "1回の滞在期間は90日以内ですか？",
+        "type": "boolean",
+        "yes": "esta_eligibility",
+        "no": "stay_under_180"
+      },
+      "stay_under_180": {
+        "question": "1回の滞在期間は6ヶ月以内ですか？",
+        "type": "boolean",
+        "yes": "result_b1_visa_required",
+        "no": "result_stay_too_long"
       },
       "esta_eligibility": {
         "question": "ESTA（電子渡航認証）の認証は取得できますか？\n（日本国籍で犯罪歴なし、過去の入国拒否なし等）",
@@ -71,71 +43,77 @@
         "yes": "result_esta_ok",
         "no": "result_b1_visa_required"
       },
-      "equipment_check": {
-        "question": "以下の条件をすべて満たしますか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "yes",
-            "text": "米国の会社に販売した装置・設備の作業で、契約書や発注書があり、滞在は6ヶ月以内",
-            "next": "result_b1_equipment_approved"
-          },
-          {
-            "value": "no",
-            "text": "いずれか1つ以上に当てはまらない",
-            "next": "result_not_business_scope"
-          }
-        ]
+      "is_equipment_service": {
+        "question": "販売した装置や設備のメンテナンス・設置作業ですか？",
+        "type": "boolean",
+        "yes": "equipment_has_contract",
+        "no": "is_specialized_work"
       },
-      "specialized_work_check": {
-        "question": "以下の条件をすべて満たしますか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "yes",
-            "text": "H-1Bビザが必要な専門性の高い作業で、滞在は6ヶ月以内",
-            "next": "result_b1_in_lieu_h1b_approved"
-          },
-          {
-            "value": "no",
-            "text": "いずれか1つ以上に当てはまらない",
-            "next": "result_h1b_required"
-          }
-        ]
+      "equipment_has_contract": {
+        "question": "米国の会社に販売した装置・設備の作業で、契約書や発注書がありますか？",
+        "type": "boolean",
+        "yes": "equipment_stay_under_180",
+        "no": "result_not_business_scope"
       },
-      "training_check": {
+      "equipment_stay_under_180": {
+        "question": "滞在は6ヶ月以内ですか？",
+        "type": "boolean",
+        "yes": "result_b1_equipment_approved",
+        "no": "result_not_business_scope"
+      },
+      "is_specialized_work": {
+        "question": "専門性の高い作業（H-1Bレベル）ですか？",
+        "type": "boolean",
+        "yes": "specialized_work_h1b_level",
+        "no": "is_training"
+      },
+      "specialized_work_h1b_level": {
+        "question": "H-1Bビザが必要な専門性の高い作業ですか？",
+        "type": "boolean",
+        "yes": "specialized_work_stay_under_180",
+        "no": "result_h1b_required"
+      },
+      "specialized_work_stay_under_180": {
+        "question": "滞在は6ヶ月以内ですか？",
+        "type": "boolean",
+        "yes": "result_b1_in_lieu_h1b_approved",
+        "no": "result_h1b_required"
+      },
+      "is_training": {
+        "question": "研修ですか？",
+        "type": "boolean",
+        "yes": "training_is_business_scope",
+        "no": "result_not_business_scope"
+      },
+      "training_is_business_scope": {
         "question": "研修内容は商用の範囲内ですか？\n（実務を伴わない見学・オリエンテーション等）",
         "type": "boolean",
-        "yes": "training_duration",
-        "no": "training_with_ojt"
+        "yes": "training_under_180",
+        "no": "training_has_ojt"
       },
-      "training_duration": {
+      "training_under_180": {
         "question": "研修期間は6ヶ月以内ですか？",
         "type": "boolean",
         "yes": "result_b1_training_approved",
         "no": "result_training_too_long"
       },
-      "training_with_ojt": {
+      "training_has_ojt": {
         "question": "研修にOJT（実務研修）が含まれますか？",
         "type": "boolean",
-        "yes": "ojt_requirements",
+        "yes": "ojt_under_18months",
         "no": "result_not_business_scope"
       },
-      "ojt_requirements": {
-        "question": "以下の条件をすべて満たしますか？",
-        "type": "multiple_choice",
-        "options": [
-          {
-            "value": "yes",
-            "text": "研修期間は18ヶ月以内で、研修に必要な英語力がある",
-            "next": "result_j1_visa_recommended"
-          },
-          {
-            "value": "no",
-            "text": "いずれか1つ以上に当てはまらない",
-            "next": "result_training_requirements_fail"
-          }
-        ]
+      "ojt_under_18months": {
+        "question": "研修期間は18ヶ月以内ですか？",
+        "type": "boolean",
+        "yes": "ojt_has_english",
+        "no": "result_training_requirements_fail"
+      },
+      "ojt_has_english": {
+        "question": "研修に必要な英語力がありますか？",
+        "type": "boolean",
+        "yes": "result_j1_visa_recommended",
+        "no": "result_training_requirements_fail"
       },
       "result_esta_ok": {
         "type": "result",
