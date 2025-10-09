@@ -1035,3 +1035,68 @@ body {
     color: #475569;
     line-height: 1.6;
 }
+
+/* Tree Visualization */
+.kb-tree {
+    background: white;
+    padding: 20px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.8;
+}
+
+.kb-tree-node {
+    margin-left: 20px;
+    border-left: 2px solid #e2e8f0;
+    padding-left: 15px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.kb-tree-node-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.kb-tree-node-id {
+    background: #1e3a8a;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.kb-tree-node-question {
+    color: #1e293b;
+    flex: 1;
+}
+
+.kb-tree-node-result {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.kb-tree-node-result.denied {
+    color: #ef4444;
+}
+
+.kb-tree-branch {
+    color: #64748b;
+    font-size: 0.8rem;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.kb-tree-branch-yes {
+    color: #10b981;
+}
+
+.kb-tree-branch-no {
+    color: #ef4444;
+}

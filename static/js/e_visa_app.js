@@ -485,15 +485,32 @@ function displayKnowledgeData(visaType) {
         <div class="kb-visa-info">
             <h4>${knowledge.visa_type.name}</h4>
             <p>${knowledge.visa_type.description}</p>
+            ${knowledge.visa_type.requirements ? `<p><strong>要件:</strong> ${knowledge.visa_type.requirements}</p>` : ''}
         </div>
+    `;
+
+    // Display tree visualization
+    const treeDiv = document.getElementById('kbTree');
+    treeDiv.innerHTML = '';
+
+    const nodes = knowledge.decision_tree.nodes;
+    const rootNode = knowledge.decision_tree.root;
+
+    const treeHtml = buildTreeVisualization(rootNode, nodes, new Set());
+    treeDiv.innerHTML = `
+        <div style="margin-bottom: 15px; padding: 10px; background: #f0f9ff; border-left: 4px solid #1e3a8a; border-radius: 4px;">
+            <strong>📊 樹形図の見方:</strong><br>
+            ・各ノードは質問または結果を表します<br>
+            ・<span style="color: #10b981;">✓ はい</span> / <span style="color: #ef4444;">✗ いいえ</span> で分岐します<br>
+            ・<span style="color: #10b981; font-weight: 600;">承認</span> = ビザ申請可能、<span style="color: #ef4444; font-weight: 600;">不承認</span> = 要件未達<br>
+            ・ノードIDをクリックすると下のノード一覧で詳細が見られます
+        </div>
+        ${treeHtml}
     `;
 
     // Display nodes
     const nodesDiv = document.getElementById('kbNodes');
     nodesDiv.innerHTML = '';
-
-    const nodes = knowledge.decision_tree.nodes;
-    const rootNode = knowledge.decision_tree.root;
 
     // Add root indicator
     Object.keys(nodes).forEach(nodeId => {
@@ -501,6 +518,65 @@ function displayKnowledgeData(visaType) {
         const nodeElement = createKBNodeElement(nodeId, node, nodeId === rootNode);
         nodesDiv.appendChild(nodeElement);
     });
+}
+
+function buildTreeVisualization(nodeId, nodes, visited, depth = 0) {
+    if (visited.has(nodeId) || depth > 50) {
+        return `<div class="kb-tree-node" style="color: #ef4444;">⚠️ 循環参照または深さ制限</div>`;
+    }
+
+    visited.add(nodeId);
+
+    const node = nodes[nodeId];
+    if (!node) {
+        return `<div class="kb-tree-node" style="color: #ef4444;">⚠️ ノード ${nodeId} が見つかりません</div>`;
+    }
+
+    const isRoot = depth === 0;
+    const isResult = node.type === 'result';
+
+    let html = '<div class="kb-tree-node">';
+
+    // Node content
+    html += '<div class="kb-tree-node-content">';
+    html += `<span class="kb-tree-node-id" onclick="scrollToNode('${nodeId}')" style="cursor: pointer;" title="クリックして詳細を表示">${nodeId}${isRoot ? ' (ROOT)' : ''}</span>`;
+
+    if (isResult) {
+        const resultClass = node.decision === 'approved' ? '' : 'denied';
+        const resultIcon = node.decision === 'approved' ? '✅' : '❌';
+        html += `<span class="kb-tree-node-result ${resultClass}">${resultIcon} ${node.title || node.message}</span>`;
+    } else {
+        const questionShort = (node.question || '').split('\n')[0].substring(0, 80);
+        html += `<span class="kb-tree-node-question">${questionShort}${questionShort.length >= 80 ? '...' : ''}</span>`;
+    }
+
+    html += '</div>';
+
+    // Branches
+    if (!isResult && node.type === 'boolean') {
+        if (node.yes) {
+            html += '<div class="kb-tree-branch kb-tree-branch-yes">✓ はい:</div>';
+            html += buildTreeVisualization(node.yes, nodes, new Set(visited), depth + 1);
+        }
+        if (node.no) {
+            html += '<div class="kb-tree-branch kb-tree-branch-no">✗ いいえ:</div>';
+            html += buildTreeVisualization(node.no, nodes, new Set(visited), depth + 1);
+        }
+    }
+
+    html += '</div>';
+    return html;
+}
+
+function scrollToNode(nodeId) {
+    const nodeElement = document.querySelector(`.kb-node[data-node-id="${nodeId}"]`);
+    if (nodeElement) {
+        nodeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        nodeElement.style.background = '#fef3c7';
+        setTimeout(() => {
+            nodeElement.style.background = '#f8fafc';
+        }, 2000);
+    }
 }
 
 function createKBNodeElement(nodeId, node, isRoot) {
