@@ -167,6 +167,10 @@ def index():
     session.clear()  # Clear session on new visit
     return render_template('index.html')
 
+@app.route('/knowledge')
+def knowledge():
+    return render_template('knowledge.html')
+
 @app.route('/api/questions')
 def get_questions():
     """Get all questions or next questions based on current progress"""
