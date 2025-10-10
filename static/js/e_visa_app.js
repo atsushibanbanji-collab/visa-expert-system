@@ -619,12 +619,21 @@ function buildTreeVisualization(nodeId, nodes, visited, depth = 0) {
 
     html += '</div>';
 
-    // Branches - 見やすいインデント
+    // Branches - 見やすいインデントと接続線
     if (!isResult && node.type === 'boolean') {
-        html += '<div style="margin-left: 30px; position: relative;">';
+        html += '<div style="margin-left: 30px; position: relative; border-left: 3px solid #e5e7eb; padding-left: 20px;">';
 
         if (node.yes) {
-            html += `<div style="margin-top: 15px;">`;
+            html += `<div style="margin-top: 15px; position: relative;">`;
+            // 接続線（横線）
+            html += `<div style="
+                position: absolute;
+                left: -20px;
+                top: 30px;
+                width: 20px;
+                height: 3px;
+                background: #10b981;
+            "></div>`;
             html += `<div class="kb-tree-branch kb-tree-branch-yes" style="
                 color: #10b981;
                 font-weight: 600;
@@ -633,13 +642,23 @@ function buildTreeVisualization(nodeId, nodes, visited, depth = 0) {
                 background: #d1fae5;
                 border-radius: 4px;
                 display: inline-block;
+                border: 2px solid #10b981;
             ">✓ はい の場合</div>`;
             html += buildTreeVisualization(node.yes, nodes, new Set(visited), depth + 1);
             html += `</div>`;
         }
 
         if (node.no) {
-            html += `<div style="margin-top: 15px;">`;
+            html += `<div style="margin-top: 15px; position: relative;">`;
+            // 接続線（横線）
+            html += `<div style="
+                position: absolute;
+                left: -20px;
+                top: 30px;
+                width: 20px;
+                height: 3px;
+                background: #ef4444;
+            "></div>`;
             html += `<div class="kb-tree-branch kb-tree-branch-no" style="
                 color: #ef4444;
                 font-weight: 600;
@@ -648,6 +667,7 @@ function buildTreeVisualization(nodeId, nodes, visited, depth = 0) {
                 background: #fee2e2;
                 border-radius: 4px;
                 display: inline-block;
+                border: 2px solid #ef4444;
             ">✗ いいえ の場合</div>`;
             html += buildTreeVisualization(node.no, nodes, new Set(visited), depth + 1);
             html += `</div>`;
