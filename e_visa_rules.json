@@ -2,169 +2,121 @@
   "visa_type": {
     "name": "Eビザ（条約貿易商・投資家）",
     "description": "日米間の貿易または投資に従事する企業の経営者・管理者向けビザ",
-    "requirements": "国籍要件、会社要件、申請者要件の3つを満たす必要があります"
+    "requirements": "申請者と会社の国籍が同じ、会社がEビザの条件を満たす、申請者がEビザの条件を満たす"
   },
   "decision_tree": {
-    "root": "nationality_check",
+    "root": "nationality_same",
     "nodes": {
-      "nationality_check": {
-        "question": "あなたは日本国籍で、日本の会社から派遣されますか？",
+      "nationality_same": {
+        "question": "申請者と会社の国籍が同じです",
         "type": "boolean",
-        "yes": "is_trader",
+        "yes": "company_investment_check_1",
         "no": "result_nationality_fail"
       },
-      "is_trader": {
-        "question": "あなたの会社は日本と米国の間で商品やサービスを取引していますか？",
+      "company_investment_check_1": {
+        "question": "減価償却前の設備や建物が30万ドル以上財務諸表の資産に計上されています",
         "type": "boolean",
-        "yes": "trader_volume",
-        "no": "is_investor"
+        "yes": "applicant_manager_ceo_check",
+        "no": "company_investment_check_2"
       },
-      "is_investor": {
-        "question": "あなたの会社は米国に約3000万円以上を投資していますか？（投資予定を含む）",
+      "company_investment_check_2": {
+        "question": "30万ドル以上で企業を買収した会社か、買収された会社です",
         "type": "boolean",
-        "yes": "investor_has_assets",
-        "no": "result_no_business"
+        "yes": "applicant_manager_ceo_check",
+        "no": "company_investment_check_3"
       },
-      "trader_volume": {
-        "question": "会社の取引の半分以上が日本と米国の間で行われていますか？",
+      "company_investment_check_3": {
+        "question": "まだ十分な売り上げがなく、これまでに人件費などのランニングコストを含め、30万ドル以上支出しています",
         "type": "boolean",
-        "yes": "trader_substantiality",
-        "no": "result_trader_volume_fail"
+        "yes": "applicant_manager_ceo_check",
+        "no": "company_investment_check_4"
       },
-      "trader_substantiality": {
-        "question": "日本と米国の間での取引は定期的に続いていますか？\n（毎月のように取引がある、または大きな取引が定期的にある）",
+      "company_investment_check_4": {
+        "question": "会社設立のために、30万ドル以上支出しました（不動産を除く）",
         "type": "boolean",
-        "yes": "trader_profit",
-        "no": "result_trader_substantiality_fail"
+        "yes": "applicant_manager_ceo_check",
+        "no": "company_trade_check_1"
       },
-      "trader_profit": {
-        "question": "貿易による利益は会社の運営費用（人件費など）の80%以上をカバーしていますか？",
+      "company_trade_check_1": {
+        "question": "会社の行う貿易の50％が日米間です",
         "type": "boolean",
-        "yes": "is_executive",
-        "no": "result_trader_substantiality_fail"
+        "yes": "company_trade_check_2",
+        "no": "result_company_fail"
       },
-      "investor_has_assets": {
-        "question": "約3000万円以上の設備や建物を購入しましたか？\n（財務諸表に記載されている固定資産）",
+      "company_trade_check_2": {
+        "question": "会社の行う貿易は継続的です",
         "type": "boolean",
-        "yes": "is_executive",
-        "no": "investor_acquisition"
+        "yes": "company_trade_check_3",
+        "no": "result_company_fail"
       },
-      "investor_acquisition": {
-        "question": "約3000万円以上で米国の会社を買収しましたか？",
+      "company_trade_check_3": {
+        "question": "貿易による利益が会社の経費の80％以上をカバーしています",
         "type": "boolean",
-        "yes": "is_executive",
-        "no": "investor_operating_costs"
+        "yes": "applicant_manager_ceo_check",
+        "no": "result_company_fail"
       },
-      "investor_operating_costs": {
-        "question": "人件費や運営費用で約3000万円以上使いましたか？\n（まだ売上は少なくても構いません）",
+      "applicant_manager_ceo_check": {
+        "question": "CEOなどのオフィサーのポジションに就きます",
         "type": "boolean",
-        "yes": "is_executive",
-        "no": "investor_setup_costs"
+        "yes": "applicant_manager_experience_position_check",
+        "no": "applicant_manager_strategy_check"
       },
-      "investor_setup_costs": {
-        "question": "会社設立のために約3000万円以上使いましたか？\n（不動産以外の費用）",
+      "applicant_manager_strategy_check": {
+        "question": "経営企画のマネージャーなど、米国拠点の経営に関わるポジションに就きます",
         "type": "boolean",
-        "yes": "is_executive",
-        "no": "result_investor_amount_fail"
+        "yes": "applicant_manager_experience_position_check",
+        "no": "applicant_manager_staff_check"
       },
-      "is_executive": {
-        "question": "あなたは経営者・役員ですか？\n（社長、副社長、取締役など）",
+      "applicant_manager_staff_check": {
+        "question": "評価・雇用に責任を持つ複数のフルタイムのスタッフを部下に持つマネージャー以上のポジションに就きます",
         "type": "boolean",
-        "yes": "executive_is_ceo",
-        "no": "is_manager"
+        "yes": "applicant_manager_experience_position_check",
+        "no": "applicant_staff_master_check"
       },
-      "executive_is_ceo": {
-        "question": "米国での役職は社長やCEOなどのトップの役職ですか？",
+      "applicant_manager_experience_position_check": {
+        "question": "米国拠点のポジションの業務に深く関連する業務の経験が2年以上あります",
         "type": "boolean",
-        "yes": "executive_experience",
-        "no": "executive_is_strategic"
-      },
-      "executive_is_strategic": {
-        "question": "経営企画など、会社の経営に関わる役職ですか？",
-        "type": "boolean",
-        "yes": "executive_experience",
-        "no": "executive_is_department_head"
-      },
-      "executive_is_department_head": {
-        "question": "部門長など、複数の社員を管理する役職ですか？",
-        "type": "boolean",
-        "yes": "executive_experience",
+        "yes": "applicant_manager_experience_management_check_1",
         "no": "result_role_fail"
       },
-      "executive_experience": {
-        "question": "米国で行う仕事と同じような業務の経験が2年以上ありますか？",
+      "applicant_manager_experience_management_check_1": {
+        "question": "2年以上のマネージャー経験があります",
         "type": "boolean",
         "yes": "result_e_visa_approved",
-        "no": "result_experience_fail"
+        "no": "applicant_manager_experience_management_check_2"
       },
-      "is_manager": {
-        "question": "あなたは管理職ですか？\n（部門長、課長など、部下の採用や評価を行う）",
+      "applicant_manager_experience_management_check_2": {
+        "question": "マネジメントが求められるプロジェクトマネージャーなどの2年以上の経験があります",
         "type": "boolean",
-        "yes": "manager_has_subordinates",
-        "no": "is_specialist"
-      },
-      "manager_has_subordinates": {
-        "question": "米国では複数の正社員の部下がいて、採用や評価の責任がありますか？",
-        "type": "boolean",
-        "yes": "manager_experience",
-        "no": "manager_strategic_role"
-      },
-      "manager_strategic_role": {
-        "question": "会社の重要な判断や経営に関わりますか？",
-        "type": "boolean",
-        "yes": "manager_experience",
+        "yes": "result_e_visa_approved",
         "no": "result_role_fail"
       },
-      "manager_experience": {
-        "question": "米国で行う仕事に関連する経験はありますか？",
-        "type": "boolean",
-        "yes": "manager_has_manager_exp",
-        "no": "result_experience_fail"
-      },
-      "manager_has_manager_exp": {
-        "question": "管理職（マネージャー）として2年以上働いた経験がありますか？",
+      "applicant_staff_master_check": {
+        "question": "理系の大学院卒で、米国拠点の技術系の業務に深く関連する3年以上の業務経験があります",
         "type": "boolean",
         "yes": "result_e_visa_approved",
-        "no": "manager_has_project_exp"
+        "no": "applicant_staff_bachelor_check"
       },
-      "manager_has_project_exp": {
-        "question": "プロジェクトマネージャーなど、マネジメントが必要な仕事を2年以上した経験がありますか？",
+      "applicant_staff_bachelor_check": {
+        "question": "理系の学部卒で、米国拠点の技術系の業務に深く関連する4年以上の業務経験があります",
         "type": "boolean",
         "yes": "result_e_visa_approved",
-        "no": "manager_has_related_exp"
+        "no": "applicant_staff_general_check"
       },
-      "manager_has_related_exp": {
-        "question": "米国で行う仕事と同じような業務を2年以上した経験がありますか？",
+      "applicant_staff_general_check": {
+        "question": "米国拠点の業務に深く関連する5年以上の業務経験があります",
         "type": "boolean",
         "yes": "result_e_visa_approved",
-        "no": "result_experience_fail"
+        "no": "applicant_tdy_purpose_check"
       },
-      "is_specialist": {
-        "question": "あなたは専門職ですか？\n（特別な技術や知識を持つスタッフ）",
+      "applicant_tdy_purpose_check": {
+        "question": "2年以内の期間で、目的を限定した派遣理由を説明できます",
         "type": "boolean",
-        "yes": "specialist_has_masters",
+        "yes": "applicant_tdy_experience_check",
         "no": "result_role_fail"
       },
-      "specialist_has_masters": {
-        "question": "理系の大学院を卒業していて、技術系の仕事の経験が3年以上ありますか？",
-        "type": "boolean",
-        "yes": "specialist_essential",
-        "no": "specialist_has_bachelor"
-      },
-      "specialist_has_bachelor": {
-        "question": "理系の大学を卒業していて、技術系の仕事の経験が4年以上ありますか？",
-        "type": "boolean",
-        "yes": "specialist_essential",
-        "no": "specialist_has_experience"
-      },
-      "specialist_has_experience": {
-        "question": "米国で行う仕事と同じような業務の経験が5年以上ありますか？",
-        "type": "boolean",
-        "yes": "specialist_essential",
-        "no": "result_role_fail"
-      },
-      "specialist_essential": {
-        "question": "あなたの技術や知識は米国の事業にとって必要不可欠ですか？\n（あなたがいないと事業が成り立たない、または代わりの人を見つけるのが難しい）",
+      "applicant_tdy_experience_check": {
+        "question": "米国拠点の業務に深く関連する2年以上の業務経験があります",
         "type": "boolean",
         "yes": "result_e_visa_approved",
         "no": "result_role_fail"
@@ -185,49 +137,21 @@
         "type": "result",
         "decision": "denied",
         "title": "国籍要件を満たしていません",
-        "message": "Eビザは申請者と会社が条約国の国籍を持つ必要があります。日本国籍の方が日本企業から派遣される場合のみ申請可能です。",
+        "message": "Eビザは申請者と会社が条約国の国籍を持つ必要があります。",
         "alternatives": ["Lビザ（企業内転勤）", "H-1Bビザ（専門職）"]
       },
-      "result_no_business": {
+      "result_company_fail": {
         "type": "result",
         "decision": "denied",
-        "title": "事業要件を満たしていません",
-        "message": "Eビザは日米間での貿易または米国への投資が必要です。",
+        "title": "会社要件を満たしていません",
+        "message": "会社がEビザの投資または貿易の条件を満たしていません。",
         "alternatives": ["Lビザ（企業内転勤）", "Bビザ（短期商用）"]
-      },
-      "result_trader_volume_fail": {
-        "type": "result",
-        "decision": "denied",
-        "title": "貿易量要件を満たしていません",
-        "message": "E-1ビザ（貿易商）は、貿易取引の50%以上が日米間で行われている必要があります。",
-        "alternatives": ["E-2ビザ（投資家）として申請を検討", "Lビザ（企業内転勤）"]
-      },
-      "result_trader_substantiality_fail": {
-        "type": "result",
-        "decision": "denied",
-        "title": "貿易の実質性要件を満たしていません",
-        "message": "E-1ビザは継続的で相当な規模の貿易取引が必要です。",
-        "alternatives": ["E-2ビザ（投資家）として申請を検討", "Bビザ（短期商用）"]
-      },
-      "result_investor_amount_fail": {
-        "type": "result",
-        "decision": "denied",
-        "title": "投資額要件を満たしていません",
-        "message": "E-2ビザは通常30万ドル以上の相当な投資が必要です。",
-        "alternatives": ["投資額を増やしてから再申請", "E-1ビザ（貿易商）として申請を検討", "Lビザ（企業内転勤）"]
-      },
-      "result_experience_fail": {
-        "type": "result",
-        "decision": "denied",
-        "title": "経験要件を満たしていません",
-        "message": "Eビザの経営幹部・マネージャーには関連する業務経験が2年以上必要です。",
-        "alternatives": ["経験を積んでから再申請", "Bビザ（短期商用）で短期派遣"]
       },
       "result_role_fail": {
         "type": "result",
         "decision": "denied",
         "title": "役職要件を満たしていません",
-        "message": "Eビザは経営幹部、マネージャー、または不可欠な専門職のみが対象です。一般従業員は申請できません。",
+        "message": "Eビザは経営幹部、マネージャー、または不可欠な専門職のみが対象です。",
         "alternatives": ["Lビザ（企業内転勤）", "H-1Bビザ（専門職）", "Bビザ（短期商用）"]
       }
     }

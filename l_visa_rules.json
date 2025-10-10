@@ -1,201 +1,148 @@
 {
   "visa_type": {
     "name": "Lビザ（企業内転勤）",
-    "description": "アメリカ以外からアメリカへのグループ内での異動",
-    "requirements": "グループ内異動、会社要件、申請者要件の3つを満たす必要があります"
+    "description": "多国籍企業の従業員が米国の関連会社に転勤するためのビザ",
+    "requirements": "アメリカ以外からアメリカへのグループ内での異動、会社と申請者がBlanket LまたはIndividual Lビザの条件を満たす"
   },
   "decision_tree": {
-    "root": "transfer_check",
+    "root": "intra_company_transfer",
     "nodes": {
-      "transfer_check": {
-        "question": "アメリカ以外の国から、同じグループ会社の米国拠点へ異動しますか？",
+      "intra_company_transfer": {
+        "question": "アメリカ以外からアメリカへのグループ内での異動です",
         "type": "boolean",
-        "yes": "is_blanket",
-        "no": "result_not_intracompany_transfer"
+        "yes": "company_blanket_revenue_check",
+        "no": "result_not_transfer"
       },
-      "is_blanket": {
-        "question": "会社はBlanket Lビザの登録を済ませていますか（または登録予定ですか）？",
+      "company_blanket_revenue_check": {
+        "question": "アメリカにある子会社の売り上げの合計が25百万ドル以上です",
         "type": "boolean",
-        "yes": "blanket_has_revenue",
-        "no": "individual_experience"
+        "yes": "applicant_blanket_stay_check",
+        "no": "company_blanket_employees_check"
       },
-      "blanket_has_revenue": {
-        "question": "米国子会社の売上合計が2500万ドル（約35億円）以上ありますか？",
+      "company_blanket_employees_check": {
+        "question": "アメリカにある子会社が1,000人以上ローカル採用をしています",
         "type": "boolean",
-        "yes": "blanket_experience",
-        "no": "blanket_has_employees"
+        "yes": "applicant_blanket_stay_check",
+        "no": "company_blanket_petition_check"
       },
-      "blanket_has_employees": {
-        "question": "米国子会社で1,000人以上を現地採用していますか？",
+      "company_blanket_petition_check": {
+        "question": "1年間に10人以上Lビザのペティション申請をしています",
         "type": "boolean",
-        "yes": "blanket_experience",
-        "no": "blanket_has_petitions"
+        "yes": "applicant_blanket_stay_check",
+        "no": "applicant_individual_stay_check"
       },
-      "blanket_has_petitions": {
-        "question": "1年間に10人以上のLビザ申請をしていますか？",
+      "applicant_blanket_stay_check": {
+        "question": "直近3年のうち1年以上、アメリカ以外のグループ会社に所属していました",
         "type": "boolean",
-        "yes": "blanket_experience",
-        "no": "result_blanket_company_fail"
-      },
-      "blanket_experience": {
-        "question": "直近3年間のうち、1年以上アメリカ以外のグループ会社に所属していましたか？",
-        "type": "boolean",
-        "yes": "blanket_is_manager",
+        "yes": "applicant_blanket_manager_experience_check",
         "no": "result_experience_fail"
       },
-      "blanket_is_manager": {
-        "question": "米国での役職は管理職（マネージャー）ですか？",
+      "applicant_blanket_manager_experience_check": {
+        "question": "マネージャーとしての経験があります",
         "type": "boolean",
-        "yes": "blanket_manager_has_experience",
-        "no": "blanket_is_specialist"
+        "yes": "applicant_blanket_manager_role_check",
+        "no": "applicant_blanket_specialized_knowledge_check"
       },
-      "blanket_manager_has_experience": {
-        "question": "管理職としての経験がありますか？",
+      "applicant_blanket_manager_role_check": {
+        "question": "アメリカでの業務はマネージャーとみなされます",
         "type": "boolean",
-        "yes": "blanket_manager_us_qualified",
-        "no": "result_manager_qualification_fail"
-      },
-      "blanket_manager_us_qualified": {
-        "question": "米国での業務も管理職として認められますか？",
-        "type": "boolean",
-        "yes": "result_blanket_l_approved",
-        "no": "result_manager_qualification_fail"
-      },
-      "blanket_is_specialist": {
-        "question": "米国での役職は専門職（特別な知識を持つスタッフ）ですか？",
-        "type": "boolean",
-        "yes": "blanket_specialist_has_knowledge",
+        "yes": "result_blanket_l_visa_approved",
         "no": "result_role_fail"
       },
-      "blanket_specialist_has_knowledge": {
-        "question": "特別な専門知識（specialized knowledge）がありますか？",
+      "applicant_blanket_specialized_knowledge_check": {
+        "question": "specialized knowledgeがあります",
         "type": "boolean",
-        "yes": "blanket_specialist_us_needs",
-        "no": "result_specialist_knowledge_fail"
+        "yes": "applicant_blanket_specialized_role_check",
+        "no": "result_role_fail"
       },
-      "blanket_specialist_us_needs": {
-        "question": "米国での業務にもその専門知識が必要ですか？",
+      "applicant_blanket_specialized_role_check": {
+        "question": "アメリカでの業務はspecialized knowledgeを必要とします",
         "type": "boolean",
-        "yes": "result_blanket_l_approved",
-        "no": "result_specialist_knowledge_fail"
+        "yes": "result_blanket_l_visa_approved",
+        "no": "result_role_fail"
       },
-      "individual_experience": {
-        "question": "直近3年間のうち、1年以上アメリカ以外のグループ会社に所属していましたか？",
+      "applicant_individual_stay_check": {
+        "question": "直近3年のうち1年以上、アメリカ以外のグループ会社に所属していました",
         "type": "boolean",
-        "yes": "individual_is_manager",
+        "yes": "applicant_individual_manager_experience_check",
         "no": "result_experience_fail"
       },
-      "individual_is_manager": {
-        "question": "米国での役職は管理職（マネージャー）ですか？",
+      "applicant_individual_manager_experience_check": {
+        "question": "マネージャーとしての経験があります",
         "type": "boolean",
-        "yes": "individual_manager_has_experience",
-        "no": "individual_is_specialist"
+        "yes": "applicant_individual_manager_role_check",
+        "no": "applicant_individual_specialized_knowledge_check"
       },
-      "individual_manager_has_experience": {
-        "question": "管理職としての経験がありますか？",
+      "applicant_individual_manager_role_check": {
+        "question": "アメリカでの業務はマネージャーとみなされます",
         "type": "boolean",
-        "yes": "individual_manager_us_qualified",
-        "no": "result_manager_qualification_fail"
-      },
-      "individual_manager_us_qualified": {
-        "question": "米国でも管理職として認められますか？",
-        "type": "boolean",
-        "yes": "individual_manager_has_subordinates",
-        "no": "result_manager_qualification_fail"
-      },
-      "individual_manager_has_subordinates": {
-        "question": "米国で大卒の正社員の部下が2名以上いますか？",
-        "type": "boolean",
-        "yes": "result_individual_l_approved",
-        "no": "result_manager_qualification_fail"
-      },
-      "individual_is_specialist": {
-        "question": "米国での役職は専門職（特別な知識を持つスタッフ）ですか？",
-        "type": "boolean",
-        "yes": "individual_specialist_has_knowledge",
+        "yes": "applicant_individual_manager_staff_check",
         "no": "result_role_fail"
       },
-      "individual_specialist_has_knowledge": {
-        "question": "特別な専門知識（specialized knowledge）がありますか？",
+      "applicant_individual_manager_staff_check": {
+        "question": "アメリカでは大卒、フルタイムの部下が2名以上います",
         "type": "boolean",
-        "yes": "individual_specialist_us_needs",
-        "no": "result_specialist_knowledge_fail"
+        "yes": "result_individual_l_visa_approved",
+        "no": "result_role_fail"
       },
-      "individual_specialist_us_needs": {
-        "question": "米国での業務にもその専門知識が必要ですか？",
+      "applicant_individual_specialized_knowledge_check": {
+        "question": "specialized knowledgeがあります",
         "type": "boolean",
-        "yes": "result_individual_l_approved",
-        "no": "result_specialist_knowledge_fail"
+        "yes": "applicant_individual_specialized_role_check",
+        "no": "result_role_fail"
       },
-      "result_blanket_l_approved": {
+      "applicant_individual_specialized_role_check": {
+        "question": "アメリカでの業務はspecialized knowledgeを必要とします",
+        "type": "boolean",
+        "yes": "result_individual_l_visa_approved",
+        "no": "result_role_fail"
+      },
+      "result_blanket_l_visa_approved": {
         "type": "result",
         "decision": "approved",
         "title": "Blanket Lビザ申請が可能です",
         "message": "あなたの状況はBlanket Lビザの要件を満たしています。",
         "next_steps": [
-          "会社のBlanket L登録の確認（未登録の場合は登録）",
-          "I-129Sフォームの作成",
-          "DS-160フォームの作成",
+          "I-129Sフォームの準備",
+          "会社のBlanket L証明書の確認",
           "面接予約",
-          "必要書類の準備（在籍証明、組織図等）",
+          "必要書類の準備（職務経歴書、組織図等）",
           "大使館・領事館での面接"
         ]
       },
-      "result_individual_l_approved": {
+      "result_individual_l_visa_approved": {
         "type": "result",
         "decision": "approved",
-        "title": "Individual Lビザ申請が可能です",
-        "message": "あなたの状況はIndividual Lビザの要件を満たしています。",
+        "title": "Lビザ（Individual）申請が可能です",
+        "message": "あなたの状況はLビザ（Individual）の要件を満たしています。",
         "next_steps": [
-          "I-129フォームの作成とUSCISへの申請",
-          "USCISからの承認待ち",
-          "DS-160フォームの作成",
+          "I-129フォームの準備",
+          "プレミアム・プロセッシングの検討",
           "面接予約",
-          "必要書類の準備（在籍証明、組織図等）",
+          "必要書類の準備（職務経歴書、組織図、関連会社の関係証明等）",
           "大使館・領事館での面接"
         ]
       },
-      "result_not_intracompany_transfer": {
+      "result_not_transfer": {
         "type": "result",
         "decision": "denied",
-        "title": "Lビザの要件を満たしていません",
-        "message": "Lビザは同じグループ会社内での異動が必要です。",
-        "alternatives": ["Eビザ（条約貿易商・投資家）", "H-1Bビザ（専門職）"]
-      },
-      "result_blanket_company_fail": {
-        "type": "result",
-        "decision": "denied",
-        "title": "Blanket Lの会社要件を満たしていません",
-        "message": "会社がBlanket L登録の要件を満たしていません。Individual Lビザを検討してください。",
-        "alternatives": ["Individual Lビザ", "Eビザ（条約貿易商・投資家）", "H-1Bビザ（専門職）"]
+        "title": "企業内転勤の要件を満たしていません",
+        "message": "Lビザはグループ内での異動が必要です。",
+        "alternatives": ["Eビザ（条約投資家）", "H-1Bビザ（専門職）"]
       },
       "result_experience_fail": {
         "type": "result",
         "decision": "denied",
         "title": "経験要件を満たしていません",
-        "message": "Lビザは直近3年間のうち1年以上、アメリカ以外のグループ会社での勤務経験が必要です。",
-        "alternatives": ["経験を積んでから再申請", "他のビザタイプを検討"]
+        "message": "直近3年のうち1年以上、アメリカ以外のグループ会社での勤務が必要です。",
+        "alternatives": ["Eビザ（条約投資家）", "H-1Bビザ（専門職）"]
       },
       "result_role_fail": {
         "type": "result",
         "decision": "denied",
         "title": "役職要件を満たしていません",
-        "message": "Lビザは管理職または専門職のみが対象です。一般社員は申請できません。",
-        "alternatives": ["H-1Bビザ（専門職）", "Eビザ（条約貿易商・投資家）"]
-      },
-      "result_manager_qualification_fail": {
-        "type": "result",
-        "decision": "denied",
-        "title": "管理職の要件を満たしていません",
-        "message": "管理職としての経験、米国での管理職としての認定、または部下の要件を満たしていません。",
-        "alternatives": ["専門職（specialized knowledge）として申請", "他のビザタイプを検討"]
-      },
-      "result_specialist_knowledge_fail": {
-        "type": "result",
-        "decision": "denied",
-        "title": "専門知識の要件を満たしていません",
-        "message": "Specialized knowledge（特別な専門知識）の要件を満たしていません。",
-        "alternatives": ["管理職として申請", "H-1Bビザ（専門職）", "Eビザ（条約貿易商・投資家）"]
+        "message": "Lビザはマネージャーまたは専門知識を持つスタッフのみが対象です。",
+        "alternatives": ["Eビザ（条約投資家）", "H-1Bビザ（専門職）"]
       }
     }
   }

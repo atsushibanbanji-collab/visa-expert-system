@@ -5,117 +5,93 @@
     "requirements": "商用活動の範囲、滞在期間、ESTA要件を確認します"
   },
   "decision_tree": {
-    "root": "is_tourism",
+    "root": "business_scope_check",
     "nodes": {
-      "is_tourism": {
-        "question": "米国での活動目的は観光ですか？",
+      "business_scope_check": {
+        "question": "アメリカでの活動は商用の範囲です",
         "type": "boolean",
-        "yes": "result_tourism_b2",
-        "no": "is_business"
+        "yes": "stay_over_90_days_check",
+        "no": "equipment_service_check"
       },
-      "is_business": {
-        "question": "商用目的ですか？\n（会議、商談、視察など）",
+      "stay_over_90_days_check": {
+        "question": "1回の滞在期間は90日を越えます",
         "type": "boolean",
-        "yes": "business_activity",
-        "no": "is_equipment_service"
+        "yes": "stay_over_6_months_check",
+        "no": "esta_eligible_check"
       },
-      "business_activity": {
-        "question": "米国での活動は商用の範囲内ですか？\n（報酬を受けない会議・商談・視察・展示会参加など）",
+      "stay_over_6_months_check": {
+        "question": "1回の滞在期間は6か月を越えません",
         "type": "boolean",
-        "yes": "stay_under_90",
-        "no": "result_not_business_scope"
-      },
-      "stay_under_90": {
-        "question": "1回の滞在期間は90日以内ですか？",
-        "type": "boolean",
-        "yes": "esta_eligibility",
-        "no": "stay_under_180"
-      },
-      "stay_under_180": {
-        "question": "1回の滞在期間は6ヶ月以内ですか？",
-        "type": "boolean",
-        "yes": "result_b1_visa_required",
+        "yes": "result_b1_visa_approved",
         "no": "result_stay_too_long"
       },
-      "esta_eligibility": {
-        "question": "ESTA（電子渡航認証）の認証は取得できますか？\n（日本国籍で犯罪歴なし、過去の入国拒否なし等）",
+      "esta_eligible_check": {
+        "question": "ESTAの認証は通る",
         "type": "boolean",
-        "yes": "result_esta_ok",
-        "no": "result_b1_visa_required"
+        "yes": "result_esta_approved",
+        "no": "result_b1_visa_approved"
       },
-      "is_equipment_service": {
-        "question": "販売した装置や設備のメンテナンス・設置作業ですか？",
+      "equipment_service_check": {
+        "question": "アメリカの会社に販売した装置や設備のための作業をします",
         "type": "boolean",
-        "yes": "equipment_has_contract",
-        "no": "is_specialized_work"
+        "yes": "equipment_contract_check",
+        "no": "h1b_level_work_check"
       },
-      "equipment_has_contract": {
-        "question": "米国の会社に販売した装置・設備の作業で、契約書や発注書がありますか？",
+      "equipment_contract_check": {
+        "question": "装置や設備の販売を示す契約書や発注書があります",
         "type": "boolean",
-        "yes": "equipment_stay_under_180",
+        "yes": "equipment_stay_check",
         "no": "result_not_business_scope"
       },
-      "equipment_stay_under_180": {
-        "question": "滞在は6ヶ月以内ですか？",
+      "equipment_stay_check": {
+        "question": "1回の滞在期間は6か月を越えません",
         "type": "boolean",
         "yes": "result_b1_equipment_approved",
         "no": "result_not_business_scope"
       },
-      "is_specialized_work": {
-        "question": "専門性の高い作業（H-1Bレベル）ですか？",
+      "h1b_level_work_check": {
+        "question": "H-1Bビザが必要な専門性の高い作業をします",
         "type": "boolean",
-        "yes": "specialized_work_h1b_level",
-        "no": "is_training"
+        "yes": "h1b_level_stay_check",
+        "no": "training_business_scope_check"
       },
-      "specialized_work_h1b_level": {
-        "question": "H-1Bビザが必要な専門性の高い作業ですか？",
-        "type": "boolean",
-        "yes": "specialized_work_stay_under_180",
-        "no": "result_h1b_required"
-      },
-      "specialized_work_stay_under_180": {
-        "question": "滞在は6ヶ月以内ですか？",
+      "h1b_level_stay_check": {
+        "question": "1回の滞在期間は6か月を越えません",
         "type": "boolean",
         "yes": "result_b1_in_lieu_h1b_approved",
         "no": "result_h1b_required"
       },
-      "is_training": {
-        "question": "研修ですか？",
+      "training_business_scope_check": {
+        "question": "研修内容は商用の範囲です",
         "type": "boolean",
-        "yes": "training_is_business_scope",
-        "no": "result_not_business_scope"
+        "yes": "training_period_check",
+        "no": "training_ojt_check"
       },
-      "training_is_business_scope": {
-        "question": "研修内容は商用の範囲内ですか？\n（実務を伴わない見学・オリエンテーション等）",
-        "type": "boolean",
-        "yes": "training_under_180",
-        "no": "training_has_ojt"
-      },
-      "training_under_180": {
-        "question": "研修期間は6ヶ月以内ですか？",
+      "training_period_check": {
+        "question": "研修期間は６か月以内です",
         "type": "boolean",
         "yes": "result_b1_training_approved",
         "no": "result_training_too_long"
       },
-      "training_has_ojt": {
-        "question": "研修にOJT（実務研修）が含まれますか？",
+      "training_ojt_check": {
+        "question": "研修にOJTが含まれます",
         "type": "boolean",
-        "yes": "ojt_under_18months",
+        "yes": "training_18months_check",
         "no": "result_not_business_scope"
       },
-      "ojt_under_18months": {
-        "question": "研修期間は18ヶ月以内ですか？",
+      "training_18months_check": {
+        "question": "研修期間は18か月以内です",
         "type": "boolean",
-        "yes": "ojt_has_english",
+        "yes": "training_english_check",
         "no": "result_training_requirements_fail"
       },
-      "ojt_has_english": {
-        "question": "研修に必要な英語力がありますか？",
+      "training_english_check": {
+        "question": "申請者に研修に必要な英語力はあります",
         "type": "boolean",
-        "yes": "result_j1_visa_recommended",
+        "yes": "result_j1_visa_approved",
         "no": "result_training_requirements_fail"
       },
-      "result_esta_ok": {
+      "result_esta_approved": {
         "type": "result",
         "decision": "approved",
         "title": "ESTA（電子渡航認証）で入国可能です",
@@ -127,11 +103,11 @@
           "渡航目的を説明できる書類の準備"
         ]
       },
-      "result_b1_visa_required": {
+      "result_b1_visa_approved": {
         "type": "result",
         "decision": "approved",
-        "title": "B-1ビザ申請が必要です",
-        "message": "あなたの状況ではB-1ビザ（短期商用）の申請が必要です。",
+        "title": "Bビザ申請が可能です",
+        "message": "あなたの状況ではBビザ（短期商用）の申請が可能です。",
         "next_steps": [
           "DS-160フォームの作成",
           "ビザ申請料金の支払い",
@@ -143,8 +119,8 @@
       "result_b1_equipment_approved": {
         "type": "result",
         "decision": "approved",
-        "title": "B-1ビザ（装置・設備サービス）申請が可能です",
-        "message": "販売した装置・設備のサービスのためのB-1ビザ申請が可能です。",
+        "title": "契約書に基づくBビザ申請が可能です",
+        "message": "販売した装置・設備のサービスのためのBビザ申請が可能です。",
         "next_steps": [
           "DS-160フォームの作成",
           "ビザ申請料金の支払い",
@@ -169,8 +145,8 @@
       "result_b1_training_approved": {
         "type": "result",
         "decision": "approved",
-        "title": "B-1ビザ（研修）申請が可能です",
-        "message": "商用範囲内の研修のためのB-1ビザ申請が可能です。",
+        "title": "Bビザ申請が可能です",
+        "message": "商用範囲内の研修のためのBビザ申請が可能です。",
         "next_steps": [
           "DS-160フォームの作成",
           "ビザ申請料金の支払い",
@@ -179,11 +155,11 @@
           "大使館・領事館での面接"
         ]
       },
-      "result_j1_visa_recommended": {
+      "result_j1_visa_approved": {
         "type": "result",
         "decision": "approved",
-        "title": "J-1ビザ（研修）を推奨します",
-        "message": "OJTを含む研修にはJ-1ビザが適しています。",
+        "title": "J-1ビザ申請が可能です",
+        "message": "OJTを含む研修のためのJ-1ビザ申請が可能です。",
         "next_steps": [
           "スポンサー組織の選定",
           "DS-2019フォームの取得",
@@ -191,16 +167,6 @@
           "SEVIS費用の支払い",
           "面接予約と面接",
           "大使館・領事館での面接"
-        ]
-      },
-      "result_tourism_b2": {
-        "type": "result",
-        "decision": "approved",
-        "title": "B-2ビザ（観光）またはESTAで入国可能です",
-        "message": "観光目的の場合、90日以内ならESTAで入国可能です。それを超える場合はB-2ビザが必要です。",
-        "next_steps": [
-          "90日以内の場合：ESTAで申請",
-          "90日超の場合：B-2ビザを申請"
         ]
       },
       "result_not_business_scope": {
