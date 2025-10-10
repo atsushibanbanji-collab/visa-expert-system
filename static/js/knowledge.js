@@ -112,6 +112,7 @@ function buildTreeVisualization(nodeId, nodes, visited, depth = 0) {
 
     const isRoot = depth === 0;
     const isResult = node.type === 'result';
+    const hasChildren = !isResult && node.type === 'boolean' && (node.yes || node.no);
 
     let html = '<div class="kb-tree-node" style="margin: 10px 0;">';
 
@@ -132,6 +133,27 @@ function buildTreeVisualization(nodeId, nodes, visited, depth = 0) {
     ">`;
 
     html += `<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">`;
+
+    // 折りたたみボタン（子ノードがある場合のみ）
+    if (hasChildren) {
+        html += `<button onclick="toggleTreeNode(this, event)" class="tree-toggle-btn" style="
+            background: white;
+            border: 2px solid ${borderColor};
+            color: ${borderColor};
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: all 0.2s ease;
+        " title="クリックして展開/折りたたみ">−</button>`;
+    }
+
     html += `<span class="kb-tree-node-id" onclick="scrollToNode('${nodeId}')" style="
         cursor: pointer;
         background: white;
@@ -166,9 +188,9 @@ function buildTreeVisualization(nodeId, nodes, visited, depth = 0) {
 
     html += '</div>';
 
-    // Branches - 見やすいインデントと接続線
-    if (!isResult && node.type === 'boolean') {
-        html += '<div style="margin-left: 30px; position: relative; border-left: 3px solid #e5e7eb; padding-left: 20px;">';
+    // Branches - 見やすいインデントと接続線（折りたたみ可能）
+    if (hasChildren) {
+        html += '<div class="tree-children" style="margin-left: 30px; position: relative; border-left: 3px solid #e5e7eb; padding-left: 20px;">';
 
         if (node.yes) {
             html += `<div style="margin-top: 15px; position: relative;">`;
@@ -225,6 +247,41 @@ function buildTreeVisualization(nodeId, nodes, visited, depth = 0) {
 
     html += '</div>';
     return html;
+}
+
+// 折りたたみ機能
+function toggleTreeNode(button, event) {
+    event.stopPropagation();
+    const node = button.closest('.kb-tree-node');
+    const children = node.querySelector('.tree-children');
+
+    if (children) {
+        const isCollapsed = children.style.display === 'none';
+        children.style.display = isCollapsed ? 'block' : 'none';
+        button.textContent = isCollapsed ? '−' : '+';
+        button.title = isCollapsed ? 'クリックして折りたたみ' : 'クリックして展開';
+    }
+}
+
+// すべて展開/折りたたみ
+function expandAll() {
+    document.querySelectorAll('.tree-children').forEach(el => {
+        el.style.display = 'block';
+    });
+    document.querySelectorAll('.tree-toggle-btn').forEach(btn => {
+        btn.textContent = '−';
+        btn.title = 'クリックして折りたたみ';
+    });
+}
+
+function collapseAll() {
+    document.querySelectorAll('.tree-children').forEach(el => {
+        el.style.display = 'none';
+    });
+    document.querySelectorAll('.tree-toggle-btn').forEach(btn => {
+        btn.textContent = '+';
+        btn.title = 'クリックして展開';
+    });
 }
 
 function scrollToNode(nodeId) {

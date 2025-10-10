@@ -61,6 +61,14 @@
                         <div class="kb-section-header">
                             <i class="fas fa-sitemap"></i>
                             <h2>決定木フローチャート</h2>
+                            <div style="margin-left: auto; display: flex; gap: 10px;">
+                                <button onclick="expandAll()" class="tree-control-btn">
+                                    <i class="fas fa-expand-alt"></i> すべて展開
+                                </button>
+                                <button onclick="collapseAll()" class="tree-control-btn">
+                                    <i class="fas fa-compress-alt"></i> すべて折りたたみ
+                                </button>
+                            </div>
                         </div>
                         <div id="kbTree" class="kb-section-content kb-tree"></div>
                     </section>
