@@ -1038,65 +1038,66 @@ body {
 
 /* Tree Visualization */
 .kb-tree {
-    background: white;
-    padding: 20px;
-    border-radius: 6px;
+    background: #fafafa;
+    padding: 25px;
+    border-radius: 8px;
     overflow-x: auto;
-    font-family: 'Courier New', monospace;
-    font-size: 0.85rem;
-    line-height: 1.8;
+    font-family: 'Segoe UI', 'Yu Gothic', 'Meiryo', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    max-height: 800px;
+    overflow-y: auto;
 }
 
 .kb-tree-node {
-    margin-left: 20px;
-    border-left: 2px solid #e2e8f0;
-    padding-left: 15px;
-    margin-top: 8px;
-    margin-bottom: 8px;
+    /* スタイルはインラインで指定されています */
 }
 
 .kb-tree-node-content {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 5px;
+    /* スタイルはインラインで指定されています */
+    transition: all 0.2s ease;
+}
+
+.kb-tree-node-content:hover {
+    transform: translateX(2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
 }
 
 .kb-tree-node-id {
-    background: #1e3a8a;
-    color: white;
-    padding: 2px 8px;
-    border-radius: 3px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    white-space: nowrap;
+    /* スタイルはインラインで指定されています */
+    transition: all 0.2s ease;
+}
+
+.kb-tree-node-id:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .kb-tree-node-question {
-    color: #1e293b;
-    flex: 1;
+    /* スタイルはインラインで指定されています */
 }
 
 .kb-tree-node-result {
-    color: #10b981;
-    font-weight: 600;
+    /* スタイルはインラインで指定されています */
 }
 
 .kb-tree-node-result.denied {
-    color: #ef4444;
+    /* スタイルはインラインで指定されています */
 }
 
 .kb-tree-branch {
-    color: #64748b;
-    font-size: 0.8rem;
-    margin-top: 3px;
-    margin-bottom: 3px;
+    /* スタイルはインラインで指定されています */
+    transition: all 0.2s ease;
+}
+
+.kb-tree-branch:hover {
+    transform: scale(1.02);
 }
 
 .kb-tree-branch-yes {
-    color: #10b981;
+    /* スタイルはインラインで指定されています */
 }
 
 .kb-tree-branch-no {
-    color: #ef4444;
+    /* スタイルはインラインで指定されています */
 }
